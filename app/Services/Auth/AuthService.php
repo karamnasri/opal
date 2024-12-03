@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Auth;
 
-use App\Contracts\AuthServiceInterface;
+use App\Contracts\Authenticatable;
+use App\Contracts\Verifiable;
 use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RegisterDTO;
 use App\DTOs\Auth\ReverifyDTO;
@@ -13,7 +14,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class AuthService implements AuthServiceInterface
+class AuthService implements Authenticatable, Verifiable
 {
     public function register(RegisterDTO $dto)
     {
@@ -44,6 +45,11 @@ class AuthService implements AuthServiceInterface
         $dto->token = $dto->user->token();
 
         return $dto;
+    }
+
+    public function logout()
+    {
+        Auth::user()?->currentAccessToken()->delete();
     }
 
     public function verify(VerifyDTO $dto)

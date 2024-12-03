@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
-use App\Contracts\AuthServiceInterface;
+use App\Contracts\Authenticatable;
+use App\Contracts\Verifiable;
 use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RegisterDTO;
 use App\DTOs\Auth\ReverifyDTO;
@@ -20,7 +21,7 @@ class AuthController extends Controller
 {
     use ApiResponseTrait;
 
-    public function __construct(private AuthServiceInterface $authService) {}
+    public function __construct(private Authenticatable $authService, private Verifiable $verifyService) {}
 
     public function register(RegisterRequest $request)
     {
@@ -37,10 +38,17 @@ class AuthController extends Controller
         return $this->successResponse(new LoginResource($data), 'Login successful');
     }
 
+    public function logout()
+    {
+        $this->authService->logout();
+
+        return $this->successResponse([], 'Logout successfully');
+    }
+
     public function verify(VerifyRequest $request)
     {
         $dto = VerifyDTO::fromRequest($request);
-        $this->authService->verify($dto);
+        $this->verifyService->verify($dto);
 
         return $this->successResponse([], 'Email Verify successfully');
     }
@@ -48,7 +56,7 @@ class AuthController extends Controller
     public function reverify(ReverifyRequest $request)
     {
         $dto = ReverifyDTO::fromRequest($request);
-        $this->authService->reverify($dto);
+        $this->verifyService->reverify($dto);
 
         return $this->successResponse([], 'Verification re-sent successfully');
     }

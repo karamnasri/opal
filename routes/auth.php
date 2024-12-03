@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -17,4 +18,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('verify', [AuthController::class, 'verify']);
 Route::post('reverify', [AuthController::class, 'reverify']);
-//TODO: Add resend email to for verification
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::get('login/{provider}', [SocialAuthController::class, 'redirect'])->middleware('social');
+Route::get('login/{provider}/callback', [SocialAuthController::class, 'handleCallback'])->middleware('social');

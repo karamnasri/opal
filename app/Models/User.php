@@ -13,8 +13,61 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Socialite\Contracts\User as SocialUser;
 
+/**
+ *
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string|null $verification_code
+ * @property \Illuminate\Support\Carbon|null $verification_code_sent_at
+ * @property mixed $password
+ * @property string|null $provider
+ * @property string|null $provider_id
+ * @property \Illuminate\Support\Carbon|null $last_logged_in_at
+ * @property int $active
+ * @property int|null $role_id
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \App\Models\Role|null $role
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static Builder|User isActive()
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User onlyTrashed()
+ * @method static Builder|User query()
+ * @method static Builder|User whereActive($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereLastLoggedInAt($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereProvider($value)
+ * @method static Builder|User whereProviderId($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereRoleId($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @method static Builder|User whereVerificationCode($value)
+ * @method static Builder|User whereVerificationCodeSentAt($value)
+ * @method static Builder|User withTrashed()
+ * @method static Builder|User withoutTrashed()
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
@@ -66,6 +119,32 @@ class User extends Authenticatable implements MustVerifyEmail
         $user->assignRole(getUserRole());
         return $user;
     }
+
+    public static function findOrCreateFromSocialUser(SocialUser $socialUser, string $provider): self
+    {
+        return DB::transaction(function () use ($socialUser, $provider) {
+            $user = self::firstOrCreate(
+                ['email' => $socialUser->getEmail()],
+                [
+                    'name' => $socialUser->getName(),
+                    'password' => bcrypt(Str::random(16)),
+                ]
+            );
+
+            $user->assignRole(getUserRole());
+
+            if (!$user->email_verified_at) {
+                $user->markEmailAsVerified();
+            }
+
+            if (!$user->provider || $user->provider !== $provider) {
+                $user->updateProviderInfo($provider, $socialUser->getId());
+            }
+
+            return $user;
+        });
+    }
+
 
 
     // --------------------------------------------------------
@@ -128,11 +207,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->createToken('auth_token')->plainTextToken;
     }
 
-    /**
-     * Verify the user's email.
-     *
-     * @return void
-     */
+    public function updateProviderInfo(string $provider, string $providerId): void
+    {
+        $this->provider = $provider;
+        $this->provider_id = $providerId;
+        $this->save();
+    }
+
     public function markEmailAsVerified(): void
     {
         $this->email_verified_at = now();
@@ -140,11 +221,6 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->save();
     }
 
-    /**
-     * Generate and update a new verification code.
-     *
-     * @return void
-     */
     private function createVerificationCode(): void
     {
         $this->verification_code = generateVerificationCode();
@@ -248,4 +324,8 @@ class User extends Authenticatable implements MustVerifyEmail
             throw new VerificationCodeExpiredException();
         }
     }
+
+    // --------------------------------------------------------
+    // Exceptions
+    // --------------------------------------------------------
 }
