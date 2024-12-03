@@ -2,12 +2,13 @@
 
 namespace App\Contracts;
 
-use Laravel\Socialite\Contracts\User as SocialUser;
+use App\DTOs\Auth\SocialCallbackDTO;
+use App\DTOs\Auth\SocialRedirectDTO;
 
 interface Sociable
 {
-    public function redirectToProvider(string $provider): string;
-    public function handleProviderCallback(string $provider): SocialUser;
-    public function loginOrRegister(SocialUser $socialUser, string $provider);
+    public function redirectToProvider(SocialRedirectDTO $dto): SocialRedirectDTO;
+    public function handleProviderCallback(SocialCallbackDTO $dto): SocialCallbackDTO;
+    public function loginOrRegister(SocialCallbackDTO $dto): SocialCallbackDTO;
     public function logout();
 }

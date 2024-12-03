@@ -3,6 +3,8 @@
 namespace App\Services\Auth;
 
 use App\Contracts\Sociable;
+use App\DTOs\Auth\SocialCallbackDTO;
+use App\DTOs\Auth\SocialRedirectDTO;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Contracts\User as SocialUser;
 use App\Models\User;
@@ -10,20 +12,23 @@ use Illuminate\Support\Facades\Auth;
 
 class SocialAuthService implements Sociable
 {
-    public function redirectToProvider(string $provider): string
+    public function redirectToProvider(SocialRedirectDTO $dto): SocialRedirectDTO
     {
-        return Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        $dto->url = Socialite::driver($dto->provider)->stateless()->redirect()->getTargetUrl();
+        return $dto;
     }
 
-    public function handleProviderCallback(string $provider): SocialUser
+    public function handleProviderCallback(SocialCallbackDTO $dto): SocialCallbackDTO
     {
-        return Socialite::driver($provider)->stateless()->user();
+        $dto->socialUser = Socialite::driver($dto->provider)->stateless()->user();
+        return $dto;
     }
 
-    public function loginOrRegister(SocialUser $socialUser, string $provider)
+    public function loginOrRegister(SocialCallbackDTO $dto): SocialCallbackDTO
     {
-        $user = User::findOrCreateFromSocialUser($socialUser, $provider);
-        return $user->token();
+        $dto->user = User::findOrCreateFromSocialUser($dto->socialUser, $dto->provider);
+        $dto->token = $dto->user->token();
+        return $dto;
     }
 
     public function logout()

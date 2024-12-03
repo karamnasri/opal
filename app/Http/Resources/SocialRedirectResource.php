@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GoogleAuthResource extends JsonResource
+class SocialRedirectResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,8 @@ class GoogleAuthResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'url' => $this->url,
+        ];
     }
 }
