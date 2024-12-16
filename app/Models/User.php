@@ -2,21 +2,28 @@
 
 namespace App\Models;
 
-use App\DTOs\Auth\RegisterDTO;
-use App\Exceptions\VerificationCodeExpiredException;
-use App\Jobs\SendVerificationEmailJob;
+use Exception;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\DTOs\Auth\RegisterDTO;
+use App\DTOs\Auth\ResetLinkDTO;
+use App\Exceptions\EmailAlreadyVerifiedException;
+use App\Exceptions\EmailNotVerifiedException;
+use App\Exceptions\InvalidVerificationCodeException;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+use App\Jobs\SendPasswordResetLinkJob;
+use App\Jobs\SendVerificationEmailJob;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Socialite\Contracts\User as SocialUser;
+use App\Exceptions\VerificationCodeExpiredException;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
  *
@@ -228,6 +235,11 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->save();
     }
 
+    public function createPasswordResetToken()
+    {
+        return Password::createToken($this);
+    }
+
     // --------------------------------------------------------
     // ROLE MANAGEMENT
     // --------------------------------------------------------
@@ -260,48 +272,16 @@ class User extends Authenticatable implements MustVerifyEmail
     // --------------------------------------------------------
 
     /**
-     * Verify the user's email.
-     *
-     * @return void
-     */
-    private function EmailNotVerified(): void
-    {
-        if (!is_null($this->email_verified_at)) {
-            throw new \Exception('Email has already been Verified.');
-        }
-    }
-
-    /**
-     * Check if enough time has passed to resend the verification email.
-     *
-     * @return bool
-     */
-    private function canResendVerificationEmail(): bool
-    {
-        if (is_null($this->verification_code_sent_at))
-            return true;
-
-
-        return $this->verification_code_sent_at->addMinute()->isPast();
-    }
-
-    /**
      * Send the verification email to the user.
      *
      * @throws \Exception
      * @return void
      */
-    public function sendVerificationEmail(): void
+    public function sendVerificationEmail()
     {
-        $this->EmailNotVerified();
-
-        if (!$this->canResendVerificationEmail()) {
-            throw new \Exception('Verification email has already been sent. Please wait before sending another.');
-        }
-
+        if ($this->email_verified_at)
+            throw new EmailAlreadyVerifiedException();
         $this->createVerificationCode();
-
-        // Dispatch the job to send the verification email
         SendVerificationEmailJob::dispatch($this);
     }
 
@@ -314,15 +294,24 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function verifyCodeAndExpiration(string $verificationCode): void
     {
-        $this->EmailNotVerified();
-
-        if ($this->verification_code !== $verificationCode) {
-            throw new \Exception('Invalid verification code.');
-        }
+        if ($this->email_verified_at)
+            throw new EmailAlreadyVerifiedException();
 
         if ($this->verification_code_sent_at->addMinutes(10)->isPast()) {
+            $this->sendVerificationEmail();
             throw new VerificationCodeExpiredException();
         }
+
+        if ($this->verification_code !== $verificationCode) {
+            throw new InvalidVerificationCodeException();
+        }
+    }
+
+    public function sendResetPasswordEmail(ResetLinkDTO $dto): void
+    {
+        if (!$this->email_verified_at)
+            throw new EmailNotVerifiedException();
+        SendPasswordResetLinkJob::dispatch($dto);
     }
 
     // --------------------------------------------------------

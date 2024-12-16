@@ -22,6 +22,7 @@ class LoginResource extends JsonResource
                 'email' => $this->user->email,
                 'role' => $this->user->role->name,
             ],
+            'verify' => $this->verify,
         ];
     }
 }

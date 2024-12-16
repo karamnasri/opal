@@ -2,6 +2,7 @@
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\RateLimiter;
 
 if (!function_exists('getUserRole')) {
     function getUserRole(): ?Role
@@ -25,20 +26,5 @@ if (!function_exists('generateVerificationCode')) {
         } while (User::where('verification_code', $verificationCode)->exists());
 
         return  $verificationCode;
-    }
-}
-
-if (!function_exists('checkVerificationRateLimit')) {
-    function checkVerificationRateLimit(int $userId, int $maxAttempts = 5): void
-    {
-        $rateLimitKey = 'verification-code:' . $userId;
-
-        // Check if the user has exceeded the max attempts
-        if (Illuminate\Support\Facades\RateLimiter::tooManyAttempts($rateLimitKey, $maxAttempts)) {
-            throw new Exception('Too many verification attempts. Please try again later.');
-        }
-
-        // Hit the rate limiter to record the attempt
-        Illuminate\Support\Facades\RateLimiter::hit($rateLimitKey);
     }
 }

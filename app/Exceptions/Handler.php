@@ -3,10 +3,8 @@
 namespace App\Exceptions;
 
 use App\Traits\ApiResponseTrait;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Traits\HandlesExceptionResponse;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,7 +41,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-
+        if (in_array(HandlesExceptionResponse::class, class_uses($e))) {
+            return $e->render();
+        }
 
         return $this->errorResponse(
             $e->getMessage() ?: 'An unexpected error occurred',

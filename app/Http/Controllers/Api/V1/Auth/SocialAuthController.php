@@ -8,7 +8,6 @@ use App\DTOs\Auth\SocialRedirectDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SocialProviderRequest;
 use App\Http\Resources\LoginResource;
-use App\Http\Resources\SocialCallbackResource;
 use App\Http\Resources\SocialRedirectResource;
 use App\Traits\ApiResponseTrait;
 

@@ -13,6 +13,7 @@ class LoginDTO
     public string $password;
     public User&Authenticatable $user;
     public string $token;
+    public bool $verify = false;
 
     public function credentials(): array
     {

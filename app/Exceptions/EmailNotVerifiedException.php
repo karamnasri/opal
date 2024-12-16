@@ -2,23 +2,17 @@
 
 namespace App\Exceptions;
 
-use App\Traits\ApiResponseTrait;
+use App\Traits\HandlesExceptionResponse;
 use Exception;
-use Illuminate\Http\JsonResponse;
 
 class EmailNotVerifiedException extends Exception
 {
-    use ApiResponseTrait;
-    protected $message = 'Email is not verified';
-    protected $code = 403;
-
-    /**
-     * Render the exception to the HTTP response.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function render(): JsonResponse
+    use HandlesExceptionResponse;
+    public function __construct()
     {
-        return $this->errorResponse($this->getMessage(), $this->getCode(), ['action' => 'reopen_verification_page']);
+
+        $this->setMessage('Email is not verified.')
+            ->setCode(403)
+            ->setErrors(['action' => 'reopen_verification_page']);
     }
 }

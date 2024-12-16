@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Contracts\Authenticatable;
+use App\Contracts\Resettable;
 use App\Contracts\Sociable;
 use App\Contracts\Verifiable;
 use App\Services\Auth\AuthService;
+use App\Services\Auth\ResetService;
 use App\Services\Auth\SocialAuthService;
+use App\Services\Auth\VerifyService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(Authenticatable::class, AuthService::class);
-        $this->app->bind(Verifiable::class, AuthService::class);
+        $this->app->bind(Verifiable::class, VerifyService::class);
+        $this->app->bind(Resettable::class, ResetService::class);
 
         $this->app->bind(Sociable::class, SocialAuthService::class);
     }

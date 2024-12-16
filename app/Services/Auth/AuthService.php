@@ -3,27 +3,19 @@
 namespace App\Services\Auth;
 
 use App\Contracts\Authenticatable;
-use App\Contracts\Verifiable;
 use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RegisterDTO;
-use App\DTOs\Auth\ReverifyDTO;
-use App\DTOs\Auth\VerifyDTO;
 use App\Exceptions\AccountNotActiveException;
-use App\Exceptions\EmailNotVerifiedException;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
-class AuthService implements Authenticatable, Verifiable
+class AuthService implements Authenticatable
 {
     public function register(RegisterDTO $dto)
     {
-        return DB::transaction(function () use ($dto) {
-            $user = User::createUser($dto->toArray());
-            $user->sendVerificationEmail();
-
-            return $user;
-        });
+        $user = User::createUser($dto->toArray());
+        $user->sendVerificationEmail();
+        return $user;
     }
 
     public function login(LoginDTO $dto)
@@ -34,8 +26,8 @@ class AuthService implements Authenticatable, Verifiable
 
         $dto->user = Auth::user();
 
-        if (!$dto->user->email_verified_at) {
-            throw new EmailNotVerifiedException();
+        if ($dto->user->email_verified_at) {
+            $dto->verify = true;
         }
 
         if (!$dto->user->isActive()) {
@@ -50,20 +42,5 @@ class AuthService implements Authenticatable, Verifiable
     public function logout()
     {
         Auth::user()?->currentAccessToken()->delete();
-    }
-
-    public function verify(VerifyDTO $dto)
-    {
-        $user = User::where('email', $dto->email)->firstOrFail();
-        checkVerificationRateLimit($user->id, 5);
-
-        $user->verifyCodeAndExpiration($dto->verification_code);
-        $user->markEmailAsVerified();
-    }
-
-    public function reverify(ReverifyDTO $dto)
-    {
-        $user = User::where('email', $dto->email)->firstOrFail();
-        $user->sendVerificationEmail();
     }
 }
