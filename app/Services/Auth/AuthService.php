@@ -13,9 +13,11 @@ class AuthService implements Authenticatable
 {
     public function register(RegisterDTO $dto)
     {
-        $user = User::createUser($dto->toArray());
-        $user->sendVerificationEmail();
-        return $user;
+        $dto->user = User::createUser($dto->toArray());
+        $dto->user->sendVerificationEmail();
+        $dto->token = $dto->user->token();
+
+        return $dto;
     }
 
     public function login(LoginDTO $dto)

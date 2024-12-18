@@ -29,17 +29,13 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
-
-            $apiDomain = config('app.env') === 'local' ? null : config('app.url');
+            Route::middleware(middleware: 'api')
+                ->prefix('v1/auth')
+                ->group(base_path('routes/auth.php'));
 
             Route::middleware('api')
-                ->domain($apiDomain)
-                ->prefix('v1/')
-                ->group(function () {
-
-                    Route::prefix('auth')
-                        ->group(base_path('routes/auth.php'));
-                });
+                ->prefix('v1/api')
+                ->group(base_path('routes/api.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));

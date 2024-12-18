@@ -21,9 +21,9 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $dto = RegisterDTO::fromRequest($request);
-        $user = $this->authService->register($dto);
+        $data = $this->authService->register($dto);
 
-        return $this->successResponse(new RegisterResource($user), 'Registration successful');
+        return $this->successResponse(new RegisterResource($data), 'Registration successful');
     }
 
     public function login(LoginRequest $request)
