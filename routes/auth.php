@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::post('/password/reset-link', [PasswordResetController::class, 'sendResetLink']);
+Route::get('/password/reset', [PasswordResetController::class, 'validateResetToken']);
 Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
 

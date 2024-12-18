@@ -5,7 +5,6 @@ namespace App\Services\Auth;
 use App\Contracts\Authenticatable;
 use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RegisterDTO;
-use App\Exceptions\AccountNotActiveException;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,29 +15,13 @@ class AuthService implements Authenticatable
         $dto->user = User::createUser($dto->toArray());
         $dto->user->sendVerificationEmail();
         $dto->token = $dto->user->token();
-
-        return $dto;
     }
 
     public function login(LoginDTO $dto)
     {
-        if (!Auth::attempt($dto->credentials())) {
-            throw new \Exception('Invalid credentials', 401);
-        }
-
-        $dto->user = Auth::user();
-
-        if ($dto->user->email_verified_at) {
-            $dto->verify = true;
-        }
-
-        if (!$dto->user->isActive()) {
-            throw new AccountNotActiveException();
-        }
-
-        $dto->token = $dto->user->token();
-
-        return $dto;
+        $dto->user = User::authenticate($dto->credentials());
+        $dto->fillDTO();
+        $dto->user->ensureAccountIsActive();
     }
 
     public function logout()

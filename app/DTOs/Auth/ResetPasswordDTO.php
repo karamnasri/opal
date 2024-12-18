@@ -5,14 +5,11 @@ namespace App\DTOs\Auth;
 use App\Models\User;
 use App\Traits\DtoRequestTrait;
 
-class ResetLinkDTO
+class ResetPasswordDTO
 {
     use DtoRequestTrait;
     public string $email;
     public string $token;
+    public string $password;
     public User $user;
-    public function url()
-    {
-        return url(config('path.auth') . '/password/reset?token=' . $this->token . '&email=' . urlencode($this->email));
-    }
 }

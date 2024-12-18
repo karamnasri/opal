@@ -35,7 +35,7 @@ class PasswordResetLinkMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verification',
+            view: 'emails.password_reset',
             with: [
                 'resetLink' => $this->data->url(),
             ],

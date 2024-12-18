@@ -20,16 +20,17 @@ class SocialAuthController extends Controller
     public function redirect(SocialProviderRequest $request)
     {
         $dto = SocialRedirectDTO::fromRequest($request);
-        $data = $this->socialAuthService->redirectToProvider($dto);
-        return $this->successResponse(new SocialRedirectResource($data), 'Redirect to Google successful');
+        $this->socialAuthService->redirectToProvider($dto);
+
+        return $this->successResponse(new SocialRedirectResource($dto), 'Redirect to Google successful');
     }
 
     public function handleCallback(SocialProviderRequest $request)
     {
         $dto = SocialCallbackDTO::fromRequest($request);
-        $dto = $this->socialAuthService->handleProviderCallback($dto);
-        $data = $this->socialAuthService->loginOrRegister($dto);
+        $this->socialAuthService->handleProviderCallback($dto);
+        $this->socialAuthService->loginOrRegister($dto);
 
-        return $this->successResponse(new LoginResource($data), 'Login with Google successful');
+        return $this->successResponse(new LoginResource($dto), 'Login with Google successful');
     }
 }

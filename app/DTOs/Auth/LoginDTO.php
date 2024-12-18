@@ -5,6 +5,7 @@ namespace App\DTOs\Auth;
 use App\Models\User;
 use App\Traits\DtoRequestTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 
 class LoginDTO
 {
@@ -21,5 +22,11 @@ class LoginDTO
             'email' => $this->email,
             'password' => $this->password,
         ];
+    }
+
+    public function fillDTO()
+    {
+        $this->verify = (bool) $this->user->email_verified_at;
+        $this->token = $this->user->token();
     }
 }

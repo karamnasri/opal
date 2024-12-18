@@ -13,4 +13,5 @@ class SocialCallbackDTO
     public SocialUser $socialUser;
     public User $user;
     public string $token;
+    public bool $verify = true;
 }
