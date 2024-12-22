@@ -54,4 +54,21 @@ trait ApiResponseTrait
             $validator->errors()
         );
     }
+
+    /**
+     * Redirect response method.
+     *
+     * @param string $redirectUrl
+     * @param string $message
+     * @param int $statusCode
+     * @return JsonResponse
+     */
+    public function redirectResponse($redirectUrl, $message = 'Redirecting', $statusCode = 302): JsonResponse
+    {
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'redirect_url' => $redirectUrl
+        ], $statusCode);
+    }
 }

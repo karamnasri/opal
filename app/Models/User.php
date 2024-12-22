@@ -231,10 +231,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendResetPasswordEmail(ResetLinkDTO $dto): void
     {
-        if (!$this->email_verified_at) {
-            throw new EmailNotVerifiedException();
-        }
-
         SendPasswordResetLinkJob::dispatch($dto);
     }
 

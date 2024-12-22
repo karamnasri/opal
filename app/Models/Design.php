@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $title
@@ -38,4 +38,26 @@ use Illuminate\Database\Eloquent\Model;
 class Design extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'description',
+        'price',
+        'discounted_price',
+        'category_id',
+        'color',
+        's3_file_url',
+        'preview_image',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'discounted_price' => 'decimal:2',
+        'color' => 'array',
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

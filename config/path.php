@@ -5,4 +5,11 @@ return [
 
     'app' => env('APP_BASE_PATH', 'v1/api'),
 
+    'frontend' => [
+        'base' => env('FRONTEND_URL', 'http://localhost:3000'),
+        'auth' => [
+            'google' => '/auth/google',
+        ],
+    ]
+
 ];
