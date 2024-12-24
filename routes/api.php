@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\DesignController;
+use App\Http\Controllers\Api\V1\LikeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,8 @@ Route::prefix('categories')->group(function () {
 
 Route::prefix('designs')->group(function () {
     Route::get('/', [DesignController::class, 'index']);
+});
+
+Route::prefix('likes')->group(function () {
+    Route::post('/toggle', [LikeController::class, 'toggle']);
 });

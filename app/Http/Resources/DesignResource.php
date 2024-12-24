@@ -20,9 +20,9 @@ class DesignResource extends JsonResource
             'description' => $this->description,
             'price' => $this->price,
             'discounted_price' => $this->discounted_price,
-            'category' => new CategoryResource($this->whenLoaded('category')),
             'colors' => $this->color,
             'preview_image' => $this->preview_image,
+            'liked' => $this->isLikedByUser(auth()->id()),
         ];
     }
 }

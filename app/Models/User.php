@@ -25,6 +25,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Socialite\Contracts\User as SocialUser;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -119,6 +120,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function likedDesigns(): BelongsToMany
+    {
+        return $this->belongsToMany(Design::class, 'likes');
+    }
+
 
     // --------------------------------------------------------
     // Scopes

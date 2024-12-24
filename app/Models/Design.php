@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  *
@@ -59,5 +60,19 @@ class Design extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function likedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'likes');
+    }
+
+    public function isLikedByUser(?int $userId): bool
+    {
+        if (!$userId) {
+            return false;
+        }
+
+        return $this->likedByUsers()->where('user_id', $userId)->exists();
     }
 }
