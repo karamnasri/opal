@@ -16,3 +16,14 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/migrate', function () {
+    Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--seed' => true]);
+    $output = Illuminate\Support\Facades\Artisan::output();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Migration and seeding completed successfully',
+        'output' => $output,
+    ]);
+});
