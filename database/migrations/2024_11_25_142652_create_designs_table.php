@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PrintTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->json('color')->nullable();
             $table->string('s3_file_url')->nullable();
             $table->string('preview_image')->nullable();
+            $table->enum('print_type', PrintTypeEnum::getValues());
             $table->timestamps();
         });
     }

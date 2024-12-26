@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PrintTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -49,12 +50,14 @@ class Design extends Model
         'color',
         's3_file_url',
         'preview_image',
+        'print_type',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'discounted_price' => 'decimal:2',
         'color' => 'array',
+        'print_type' => PrintTypeEnum::class
     ];
 
     public function category()

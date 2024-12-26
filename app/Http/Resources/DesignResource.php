@@ -22,6 +22,7 @@ class DesignResource extends JsonResource
             'discounted_price' => $this->discounted_price,
             'colors' => $this->color,
             'preview_image' => $this->preview_image,
+            'print_type' => $this->print_type,
             'liked' => $this->isLikedByUser(auth()->id()),
         ];
     }
