@@ -24,6 +24,7 @@ Route::prefix('categories')->group(function () {
 
 Route::prefix('designs')->group(function () {
     Route::get('/', [DesignController::class, 'index']);
+    Route::get('/liked', [DesignController::class, 'liked']);
 });
 
 Route::prefix('likes')->group(function () {

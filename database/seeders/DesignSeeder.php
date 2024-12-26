@@ -122,8 +122,8 @@ class DesignSeeder extends Seeder
             [
                 'title' => 'Industrial Revolution',
                 'description' => 'Inspired by industrial designs, strong lines, and raw materials.',
-                'price' => 90.00,
-                'discounted_price' => 75.00,
+                'price' => null,
+                'discounted_price' => null,
                 'category_id' => 9,
                 'color' => json_encode(['#A9A9A9', '#696969', '#D3D3D3']),
                 's3_file_url' => 'https://example-bucket.s3.amazonaws.com/industrial-revolution.psd',
@@ -161,8 +161,8 @@ class DesignSeeder extends Seeder
             [
                 'title' => 'Woodland Escape',
                 'description' => 'Inspired by the serene and earthy tones of a forest.',
-                'price' => 70.00,
-                'discounted_price' => 60.00,
+                'price' => null,
+                'discounted_price' => null,
                 'category_id' => 1,
                 'color' => json_encode(['#228B22', '#6B8E23', '#8B4513']),
                 's3_file_url' => 'https://example-bucket.s3.amazonaws.com/woodland-escape.psd',
@@ -200,8 +200,8 @@ class DesignSeeder extends Seeder
             [
                 'title' => 'Watercolor Bliss',
                 'description' => 'Soft, pastel hues blending into a beautiful watercolor design.',
-                'price' => 65.00,
-                'discounted_price' => 55.00,
+                'price' => null,
+                'discounted_price' => null,
                 'category_id' => 1,
                 'color' => json_encode(['#ADD8E6', '#F0E68C', '#D3D3D3']),
                 's3_file_url' => 'https://example-bucket.s3.amazonaws.com/watercolor-bliss.psd',

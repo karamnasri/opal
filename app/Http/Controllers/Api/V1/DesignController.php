@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\DTOs\Design\DesignCategoryFilterDTO;
+use App\DTOs\Design\DesignFilterDTO;
+use App\DTOs\Design\LikedDesignDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DesignFilterRequest;
 use App\Http\Resources\DesignCollection;
@@ -15,8 +16,15 @@ class DesignController extends Controller
     public function __construct(private DesignService $designService) {}
     public function index(DesignFilterRequest $request)
     {
-        $dto = DesignCategoryFilterDTO::fromRequest($request);
+        $dto = DesignFilterDTO::fromRequest($request);
         $this->designService->getAll($dto);
+
+        return $this->successResponse(new DesignCollection($dto->designs), 'Designs retrieved successfully.');
+    }
+    public function liked()
+    {
+        $dto = new LikedDesignDTO();
+        $this->designService->getLiked($dto);
 
         return $this->successResponse(new DesignCollection($dto->designs), 'Designs retrieved successfully.');
     }

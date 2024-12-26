@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PrintTypeEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class DesignFilterRequest extends FormRequest
 {
@@ -23,6 +25,8 @@ class DesignFilterRequest extends FormRequest
     {
         return [
             'category_id' => 'nullable|exists:categories,id',
+            'print_type' => ['nullable', Rule::enum(PrintTypeEnum::class)],
+            'is_free' => 'nullable|boolean'
         ];
     }
 }
