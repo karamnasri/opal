@@ -9,7 +9,7 @@ class DesignService
 {
     public function getAll(DesignFilterDTO $dto)
     {
-        $query = Design::query();
+        $query = Design::query()->with(['category', 'likedByUsers']);
 
         if ($dto->category_id) {
             $query->where('category_id', $dto->category_id);

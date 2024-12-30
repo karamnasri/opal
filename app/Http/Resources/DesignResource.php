@@ -18,6 +18,7 @@ class DesignResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
+            'category' => new CategoryResource($this->category),
             'price' => $this->price,
             'discounted_price' => $this->discounted_price,
             'colors' => $this->color,
