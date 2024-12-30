@@ -13,5 +13,6 @@ class DesignFilterDTO
     public ?int $category_id = null;
     public ?string $print_type = null;
     public ?bool $is_free = null;
+    public ?bool $is_liked = null;
     public Collection|LengthAwarePaginator $designs;
 }

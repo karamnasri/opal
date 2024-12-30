@@ -26,7 +26,8 @@ class DesignFilterRequest extends FormRequest
         return [
             'category_id' => 'nullable|exists:categories,id',
             'print_type' => ['nullable', Rule::enum(PrintTypeEnum::class)],
-            'is_free' => 'nullable|boolean'
+            'is_free' => 'nullable|boolean',
+            'is_liked' => 'nullable|boolean',
         ];
     }
 }

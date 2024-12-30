@@ -21,11 +21,4 @@ class DesignController extends Controller
 
         return $this->successResponse(new DesignCollection($dto->designs), 'Designs retrieved successfully.');
     }
-    public function liked()
-    {
-        $dto = new LikedDesignDTO();
-        $this->designService->getLiked($dto);
-
-        return $this->successResponse(new DesignCollection($dto->designs), 'Designs retrieved successfully.');
-    }
 }

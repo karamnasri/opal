@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\DTOs\Design\DesignFilterDTO;
-use App\DTOs\Design\LikedDesignDTO;
 use App\Models\Design;
 
 class DesignService
@@ -28,11 +27,14 @@ class DesignService
             }
         }
 
-        $dto->designs = $query->paginate();
-    }
+        if (!is_null($dto->is_liked)) {
+            if ($dto->is_liked) {
+                $query->whereHas('likedByUsers', function ($query) {
+                    $query->where('user_id', auth()->id());
+                });
+            }
+        }
 
-    public function getLiked(LikedDesignDTO $dto)
-    {
-        $dto->designs = auth()->user()->likedDesigns()->paginate();
+        $dto->designs = $query->paginate();
     }
 }
