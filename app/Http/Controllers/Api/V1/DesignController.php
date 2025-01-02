@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\DTOs\Design\DesignFilterDTO;
-use App\DTOs\Design\LikedDesignDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DesignFilterRequest;
 use App\Http\Resources\DesignCollection;

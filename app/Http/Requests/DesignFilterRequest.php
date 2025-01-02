@@ -30,4 +30,28 @@ class DesignFilterRequest extends FormRequest
             'is_liked' => 'nullable|boolean',
         ];
     }
+
+    /**
+     * This method will prepare the data for validation.
+     */
+    public function prepareForValidation()
+    {
+        if ($this->has('is_free')) {
+            $this->merge([
+                'is_free' => filter_var($this->input('is_free'), FILTER_VALIDATE_BOOLEAN),
+            ]);
+        }
+
+        if ($this->has('is_liked')) {
+            $this->merge([
+                'is_liked' => filter_var($this->input('is_liked'), FILTER_VALIDATE_BOOLEAN),
+            ]);
+        }
+
+        if ($this->has('print_type')) {
+            $this->merge([
+                'print_type' => PrintTypeEnum::from($this->input('print_type'))->value
+            ]);
+        }
+    }
 }
