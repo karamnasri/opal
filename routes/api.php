@@ -23,8 +23,8 @@ Route::prefix('categories')->group(function () {
 });
 
 Route::prefix('designs')->group(function () {
-    Route::get('/', [DesignController::class, 'index']);
-    Route::get('/liked', [DesignController::class, 'liked']);
+    Route::get('/', [DesignController::class, 'index'])->name('designs.index');
+    Route::get('/all', fn(Request $req) => redirect()->route('designs.index', $req->query()));
 });
 
 Route::prefix('likes')->group(function () {
