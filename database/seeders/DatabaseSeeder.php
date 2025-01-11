@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DesignCategorySeeder::class);
         $this->call(DesignSeeder::class);
         $this->call(LikeSeeder::class);
+        $this->call(BannerSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 
