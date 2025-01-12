@@ -19,6 +19,10 @@ class DesignService
             $query->where('print_type', $dto->print_type);
         }
 
+        if ($dto->query) {
+            $query->where('title', 'LIKE', "%$dto->query%");
+        }
+
         if (!is_null($dto->is_free)) {
             if ($dto->is_free) {
                 $query->whereNull('price');

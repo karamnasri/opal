@@ -25,6 +25,7 @@ Route::prefix('categories')->group(function () {
 
 Route::prefix('designs')->group(function () {
     Route::get('/', [DesignController::class, 'index'])->name('designs.index');
+    Route::get('/search', [DesignController::class, 'search'])->name('designs.search');
     Route::get('/all', fn(Request $req) => redirect()->route('designs.index', $req->query()));
 });
 
