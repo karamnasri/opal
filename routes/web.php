@@ -3,8 +3,9 @@
 use App\Models\Track;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,20 +71,51 @@ Route::post('/git/pull', function (Illuminate\Http\Request $request) {
     ]);
 });
 
-// Route::post('/database/peek', function () {
-//     $tables = DB::select('SHOW TABLES');
-//     $tableKey = "Tables_in_" . config('database.connections.mysql.database');
-//     $tableNames = array_map(fn($table) => $table->$tableKey, $tables);
 
-//     // Fetch data from each table
-//     $tablesData = [];
-//     foreach ($tableNames as $tableName) {
-//         $tablesData[$tableName] = DB::table($tableName)->limit(5)->get();
-//     }
+Route::post('/database/peek', function (Request $request) {
+    $secret = env('DATABASE_SECRET');
+    if ($request->header('X-Peek-Secret') !== $secret) {
+        abort(403, 'Unauthorized action.');
+    }
 
-//     return response()->json([
-//         'status' => true,
-//         'message' => 'Database tables and data retrieved successfully.',
-//         'data' => $tablesData,
-//     ]);
-// });
+    // Prevent access in production
+    if (app()->environment('production')) {
+        abort(403, 'This operation is not allowed in production.');
+    }
+
+    // Validate the table name
+    $table = $request->input('table');
+    if (!$table) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Table name is required.',
+        ], 400);
+    }
+
+    // Check if the table exists
+    if (!Schema::hasTable($table)) {
+        return response()->json([
+            'status' => 'error',
+            'message' => "Table '{$table}' does not exist.",
+        ], 404);
+    }
+
+    // Retrieve and return the data (limit to 25 rows)
+    $data = DB::table($table)->limit(25)->get();
+
+    // Log metadata to the Track table
+    Track::create([
+        'action' => 'database_peek',
+        'ip_address' => $request->ip(),
+        'details' => json_encode([
+            'table' => $table,
+            'row_count' => $data->count(),
+        ]),
+    ]);
+
+    return response()->json([
+        'status' => 'success',
+        'message' => "Data from table '{$table}' retrieved successfully.",
+        'data' => $data,
+    ]);
+});
