@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 Route::post('database/migrate', function (Request $request) {
     $secret = env('DATABASE_SECRET');
-    if ($request->header('X-MIGRATION-Secret') !== $secret) {
+    if ($request->header('X-Migration-Secret') !== $secret) {
         abort(403, 'Unauthorized action.');
     }
 
