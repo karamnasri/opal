@@ -21,8 +21,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('/migrate', function (Request $request) {
-    $secret = env('DATABASE_MIGRATE_SECRET');
+Route::post('database/migrate', function (Request $request) {
+    $secret = env('DATABASE_SECRET');
     if ($request->header('X-MIGRATION-Secret') !== $secret) {
         abort(403, 'Unauthorized action.');
     }
@@ -49,7 +49,7 @@ Route::post('/migrate', function (Request $request) {
 });
 
 Route::post('/git/pull', function (Illuminate\Http\Request $request) {
-    $secret = env('GIT_PULL_SECRET');
+    $secret = env('GIT_SECRET');
     if ($request->header('X-Git-Secret') !== $secret) {
         abort(403, 'Unauthorized action.');
     }
@@ -69,3 +69,21 @@ Route::post('/git/pull', function (Illuminate\Http\Request $request) {
         'message' => implode("\n", $output),
     ]);
 });
+
+// Route::post('/database/peek', function () {
+//     $tables = DB::select('SHOW TABLES');
+//     $tableKey = "Tables_in_" . config('database.connections.mysql.database');
+//     $tableNames = array_map(fn($table) => $table->$tableKey, $tables);
+
+//     // Fetch data from each table
+//     $tablesData = [];
+//     foreach ($tableNames as $tableName) {
+//         $tablesData[$tableName] = DB::table($tableName)->limit(5)->get();
+//     }
+
+//     return response()->json([
+//         'status' => true,
+//         'message' => 'Database tables and data retrieved successfully.',
+//         'data' => $tablesData,
+//     ]);
+// });
