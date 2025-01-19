@@ -14,4 +14,8 @@ class Track extends Model
         'ip_address',
         'details',
     ];
+
+    protected $casts = [
+        'ip_address' => 'encrypted'
+    ];
 }

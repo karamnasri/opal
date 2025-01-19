@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\DesignController;
 use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,11 @@ Route::prefix('likes')->group(function () {
 
 Route::prefix('banners')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
+});
+
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index']);
+    Route::post('/add', [CartController::class, 'add']);
+    Route::delete('/remove', [CartController::class, 'remove']);
+    Route::post('/empty', [CartController::class, 'empty']);
 });
