@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\DesignController;
 use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,4 +45,14 @@ Route::prefix('cart')->group(function () {
     Route::post('/add', [CartController::class, 'add']);
     Route::delete('/remove', [CartController::class, 'remove']);
     Route::post('/empty', [CartController::class, 'empty']);
+});
+
+Route::prefix('subscription')->group(function () {
+
+    Route::get('/', [SubscriptionController::class, 'index']);
+    Route::post('/', [SubscriptionController::class, 'store']);
+});
+
+Route::prefix('customers')->group(function () {
+    Route::post('/', [CustomerController::class, 'upsert']);
 });

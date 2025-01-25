@@ -3,6 +3,7 @@
 use App\Enums\PrintTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -16,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->decimal('price', 10, 2)->nullable();
-            $table->decimal('discounted_price', 10, 2)->nullable();
+            $table->bigInteger('price');
+            $table->integer('discount_percentage')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->json('color')->nullable();
             $table->string('s3_file_url')->nullable();
@@ -25,6 +26,8 @@ return new class extends Migration
             $table->enum('print_type', PrintTypeEnum::getValues());
             $table->timestamps();
         });
+
+        DB::statement('ALTER TABLE designs ADD CONSTRAINT check_discount_percentage_range CHECK (discount_percentage >= 0 AND discount_percentage <= 100)');
     }
 
     /**

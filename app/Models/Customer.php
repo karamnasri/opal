@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string|null $brand
@@ -32,4 +32,16 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'brand',
+        'phone',
+        'address',
+        'last_order_at',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'last_order_at' => 'datetime'
+    ];
 }

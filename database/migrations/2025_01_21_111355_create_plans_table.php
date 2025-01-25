@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cart_items', function (Blueprint $table) {
+        Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cart_id')->constrained()->onDelete('cascade');
-            $table->foreignId('design_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
+            $table->string('name');
+            $table->string('slug')->unique();
             $table->bigInteger('price');
+            $table->enum('billing_cycle', ['monthly', 'annual']);
+            $table->integer('designs_limit');
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE cart_items ADD CONSTRAINT check_quantity_min CHECK (quantity >= 1)');
     }
 
     /**
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('plans');
     }
 };

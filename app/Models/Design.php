@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\PriceCast;
 use App\Enums\PrintTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,7 @@ class Design extends Model
         'title',
         'description',
         'price',
-        'discounted_price',
+        'discount_percentage',
         'category_id',
         'color',
         's3_file_url',
@@ -54,8 +55,8 @@ class Design extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'discounted_price' => 'decimal:2',
+        'price' => PriceCast::class,
+        'discount_percentage' => 'integer',
         'color' => 'array',
         'print_type' => PrintTypeEnum::class
     ];

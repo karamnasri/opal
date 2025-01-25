@@ -23,6 +23,7 @@ class LoginResource extends JsonResource
                 'role' => $this->user->role->name,
             ],
             'verify' => $this->verify,
+            'customer' => new CustomerResource($this->customer),
         ];
     }
 }

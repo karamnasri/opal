@@ -2,6 +2,7 @@
 
 namespace App\DTOs\Auth;
 
+use App\Models\Customer;
 use App\Models\User;
 use App\Traits\DtoRequestTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -13,6 +14,7 @@ class LoginDTO
     public string $email;
     public string $password;
     public User&Authenticatable $user;
+    public ?Customer $customer = null;
     public string $token;
     public bool $verify = false;
 
@@ -28,5 +30,6 @@ class LoginDTO
     {
         $this->verify = (bool) $this->user->email_verified_at;
         $this->token = $this->user->token();
+        $this->customer = $this->user->customer;
     }
 }
