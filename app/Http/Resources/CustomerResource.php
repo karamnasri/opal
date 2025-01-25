@@ -19,7 +19,6 @@ class CustomerResource extends JsonResource
             'phone' => $this->phone,
             'address' => $this->address,
             'brand' => $this->brand,
-            'last_order_at' => $this->last_order_at
         ];
     }
 }
