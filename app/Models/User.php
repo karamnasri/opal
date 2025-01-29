@@ -13,7 +13,6 @@ use App\Exceptions\InvalidCredentialsException;
 use App\Exceptions\InvalidResetTokenException;
 use App\Exceptions\InvalidVerificationCodeException;
 use App\Exceptions\VerificationCodeExpiredException;
-use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendPasswordResetLinkJob;
@@ -30,7 +29,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * @property int $id
@@ -52,7 +50,7 @@ use Illuminate\Support\Facades\Hash;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     // --------------------------------------------------------
     // Attributes
