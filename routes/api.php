@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\LikeController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,4 +56,8 @@ Route::prefix('subscription')->group(function () {
 
 Route::prefix('customers')->group(function () {
     Route::post('/', [CustomerController::class, 'upsert']);
+});
+
+Route::prefix('notifications')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
 });

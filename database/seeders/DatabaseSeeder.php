@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LikeSeeder::class);
         $this->call(BannerSeeder::class);
         $this->call(PlanSeeder::class);
+        $this->call(NotificationsTableSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 
