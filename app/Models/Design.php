@@ -79,4 +79,13 @@ class Design extends Model
 
         return $this->likedByUsers()->where('user_id', $userId)->exists();
     }
+
+    public function discountPrice()
+    {
+        $discountedPrice = is_null($this->discount_percentage)
+            ? $this->price
+            : $this->price * ((100 - $this->discount_percentage) / 100);
+
+        return round($discountedPrice, 2);
+    }
 }
