@@ -60,4 +60,5 @@ Route::prefix('customers')->group(function () {
 
 Route::prefix('notifications')->group(function () {
     Route::get('/', [NotificationController::class, 'index']);
+    Route::post('/', [NotificationController::class, 'read']);
 });

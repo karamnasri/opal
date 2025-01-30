@@ -32,4 +32,9 @@ class NotificationService
             ->get()
             ->groupBy('period');
     }
+
+    public function markAsRead(array $notificationIds)
+    {
+        Notification::whereIn('id', $notificationIds)->update(['is_read' => true]);
+    }
 }
