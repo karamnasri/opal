@@ -16,10 +16,12 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
-    public function getTotalPriceAttribute()
+    public function getTotalPriceBeforeAttribute()
     {
-        return $this->items->sum(function ($item) {
-            return $item->total_price;
-        });
+        return $this->items->sum(fn($item) => $item->design->price * $item->quantity);
+    }
+    public function getTotalPriceAfterAttribute()
+    {
+        return $this->items->sum(fn($item) => $item->price);
     }
 }
