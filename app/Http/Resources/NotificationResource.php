@@ -20,6 +20,7 @@ class NotificationResource extends JsonResource
             'message' => $this->message,
             'created_at' => $this->created_at->toDateTimeString(),
             'period' => $this->period,
+            'is_read' => $this->is_read,
         ];
     }
 }

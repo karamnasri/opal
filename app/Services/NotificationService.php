@@ -15,6 +15,7 @@ class NotificationService
             'id',
             'title',
             'message',
+            'is_read',
             'created_at',
             DB::raw("
                 CASE
