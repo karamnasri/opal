@@ -17,6 +17,10 @@ class Notification extends Model
         'is_read',
     ];
 
+    protected $casts = [
+        'is_read' => 'boolean'
+    ];
+
     public function scopeMyNotification(Builder $query)
     {
         return $query->where('user_id', auth()->id());
