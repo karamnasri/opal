@@ -86,6 +86,6 @@ class Design extends Model
             ? $this->price
             : $this->price * ((100 - $this->discount_percentage) / 100);
 
-        return round($discountedPrice, 2);
+        return (float) number_format($discountedPrice, 2);
     }
 }
