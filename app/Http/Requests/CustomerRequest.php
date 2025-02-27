@@ -22,7 +22,7 @@ class CustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'phone' => ['required', 'string', 'max:15', 'unique:customers,phone,' . auth()->user()->customer->id],
+            'phone' => ['required', 'string', 'max:15', 'unique:customers,phone,' . auth()->user()->customer?->id],
             'address' => ['nullable', 'string', 'max:255'],
             'brand' => ['nullable', 'string', 'max:255']
         ];
