@@ -49,9 +49,11 @@ Route::prefix('cart')->group(function () {
 });
 
 Route::prefix('subscription')->group(function () {
-
     Route::get('/', [SubscriptionController::class, 'index']);
-    Route::post('/', [SubscriptionController::class, 'store']);
+    Route::get('/{plan:slug}', [SubscriptionController::class, 'subscribe']);
+
+    Route::get('/success', fn() => dd('success'))->name('subscription.success');
+    Route::get('/cancel', fn() => dd('cancel'))->name('subscription.cancel');
 });
 
 Route::prefix('customers')->group(function () {

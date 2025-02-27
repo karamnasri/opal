@@ -14,8 +14,10 @@ class Plan extends Model
         'name',
         'slug',
         'price',
-        'billing_cycle',
+        'stripe_product_id',
+        'stripe_price_id',
         'designs_limit',
+        'is_yearly',
     ];
 
     protected $casts = [

@@ -19,7 +19,6 @@ class PlanResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'price' => $this->price,
-            'billing_cycle' => $this->billing_cycle,
             'designs_limit' => $this->designs_limit,
         ];
     }

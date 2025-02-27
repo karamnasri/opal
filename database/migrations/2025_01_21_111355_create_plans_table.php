@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('stripe_product_id');
+            $table->string('stripe_price_id');
             $table->bigInteger('price');
-            $table->enum('billing_cycle', ['monthly', 'annual']);
             $table->integer('designs_limit');
+            $table->boolean('is_yearly');
             $table->timestamps();
+
+            $table->unique(['stripe_product_id', 'stripe_price_id']);
         });
     }
 

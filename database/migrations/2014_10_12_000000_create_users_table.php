@@ -25,7 +25,9 @@ return new class extends Migration
             $table->timestamp('last_logged_in_at')->nullable();
             $table->boolean('active')->default(true);
             $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('cascade');
-            $table->integer('designs_used')->default(0);
+            $table->integer('available_designs')->default(0);
+            $table->integer('design_limit_bank')->default(0);
+            $table->timestamp('subscription_start')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

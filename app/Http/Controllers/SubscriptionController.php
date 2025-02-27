@@ -26,9 +26,9 @@ class SubscriptionController extends Controller
         return $this->successResponse(PlanResource::collection($plans), 'Plans retrieved successfully.');
     }
 
-    public function store(Request $request)
+    public function subscribe(Plan $plan)
     {
-        $result = $this->subscriptionService->subscribeToPlan($request->plan, $request->payment_method);
+        $result = $this->subscriptionService->subscribeToPlan($plan);
 
         return $this->successResponse($result, 'Subscription created successfully.');
     }
