@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Enums\PrintTypeEnum;
+use App\Models\Design;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DesignSeeder extends Seeder
 {
@@ -14,7 +14,7 @@ class DesignSeeder extends Seeder
      */
     public function run(): void
     {
-        $designs = [
+        $designs = collect([
             [
                 'title' => 'Ethnic Pattern 1',
                 'description' => 'A traditional ethnic pattern with intricate details.',
@@ -223,8 +223,8 @@ class DesignSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ];
+        ]);
 
-        DB::table('designs')->insert($designs);
+        $designs->map(fn($design) => Design::create($design));
     }
 }

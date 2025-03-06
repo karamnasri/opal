@@ -18,7 +18,7 @@ class LikeSeeder extends Seeder
         $userIds = User::pluck('id')->toArray();
         $designIds = Design::pluck('id')->toArray();
 
-        $numberOfLikes = 100;
+        $numberOfLikes = 10;
         $existingLikes = [];
 
         $likes = [];

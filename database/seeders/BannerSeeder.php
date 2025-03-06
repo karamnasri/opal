@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Banner;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class BannerSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class BannerSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('banners')->insert([
+        $banners = collect([
             [
                 'image_url' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 1',
@@ -55,5 +55,7 @@ class BannerSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
+
+        $banners->map(fn($banner) => Banner::create($banner));
     }
 }

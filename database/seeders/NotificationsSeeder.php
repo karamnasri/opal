@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class NotificationsTableSeeder extends Seeder
+class NotificationsSeeder extends Seeder
 {
     /**
      * Run the database seeds.

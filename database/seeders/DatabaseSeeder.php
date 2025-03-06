@@ -18,12 +18,12 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'User']);
 
         $this->call(UserSeeder::class);
-        $this->call(DesignCategorySeeder::class);
+        $this->call(CategorySeeder::class);
         $this->call(DesignSeeder::class);
         $this->call(LikeSeeder::class);
         $this->call(BannerSeeder::class);
         $this->call(PlanSeeder::class);
-        $this->call(NotificationsTableSeeder::class);
+        $this->call(NotificationsSeeder::class);
 
         // \App\Models\User::factory(10)->create();
 
