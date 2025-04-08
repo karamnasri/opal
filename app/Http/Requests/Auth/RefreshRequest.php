@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddToCartRequest extends FormRequest
+class RefreshRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,7 +22,7 @@ class AddToCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'design_id' => 'required|exists:designs,id',
+            'refresh_token' => 'required|string'
         ];
     }
 }

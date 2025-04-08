@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\DTOs\CartDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AddToCartRequest;
 use App\Http\Requests\RemoveFromCartRequest;
 use App\Http\Resources\CartResource;
-use App\Models\Design;
 use App\Services\CartService;
 use App\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -30,13 +30,9 @@ class CartController extends Controller
      */
     public function add(AddToCartRequest $request)
     {
-        $cart = $this->cartService->getAll();
-
-        $cartItem = $this->cartService->addItemToCart(
-            $cart->id,
-            $request->design_id,
-            $request->quantity
-        );
+        $dto = CartDTO::fromRequest($request);
+        $dto->cart = $this->cartService->getAll($dto);
+        $this->cartService->addItemToCart($dto);
 
         return $this->successResponse([], 'Item added to cart successfully.');
     }
@@ -46,8 +42,9 @@ class CartController extends Controller
      */
     public function remove(RemoveFromCartRequest $request)
     {
-        $cart = $this->cartService->getAll();
-        $this->cartService->removeItemFromCart($cart->id, $request->design_id);
+        $dto = CartDTO::fromRequest($request);
+        $dto->cart = $this->cartService->getAll();
+        $this->cartService->removeItemFromCart($dto);
 
         return $this->successResponse([], 'Item removed from cart successfully.');
     }

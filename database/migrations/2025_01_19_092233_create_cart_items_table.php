@@ -16,12 +16,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id')->constrained()->onDelete('cascade');
             $table->foreignId('design_id')->constrained()->onDelete('cascade');
-            $table->integer('quantity')->default(1);
-            $table->bigInteger('price');
+            $table->unsignedBigInteger('final_price');
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE cart_items ADD CONSTRAINT check_quantity_min CHECK (quantity >= 1)');
     }
 
     /**

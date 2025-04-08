@@ -8,7 +8,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class LikeSeeder extends Seeder
+class DesignUserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,18 +18,17 @@ class LikeSeeder extends Seeder
         $userIds = User::pluck('id')->toArray();
         $designIds = Design::pluck('id')->toArray();
 
-        $numberOfLikes = 10;
-        $existingLikes = [];
+        $numberOfRelations = 10;
+        $relations = [];
 
-        $likes = [];
-        while (count($likes) < $numberOfLikes) {
+        while (count($relations) < $numberOfRelations) {
             $randomDesignId = $designIds[array_rand($designIds)];
             $randomUserId = $userIds[array_rand($userIds)];
             $key = "{$randomDesignId}-{$randomUserId}";
 
             if (!isset($existingLikes[$key])) {
                 $existingLikes[$key] = true;
-                $likes[] = [
+                $relations[$key] = [
                     'design_id' => $randomDesignId,
                     'user_id' => $randomUserId,
                     'created_at' => now(),
@@ -38,6 +37,6 @@ class LikeSeeder extends Seeder
             }
         }
 
-        DB::table('likes')->insert($likes);
+        DB::table('design_user')->insert(array_values($relations));
     }
 }

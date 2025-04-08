@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Contracts\Authenticatable;
 use App\DTOs\Auth\LoginDTO;
+use App\DTOs\Auth\RefreshDTO;
 use App\DTOs\Auth\RegisterDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
-use App\Http\Resources\LoginResource;
-use App\Http\Resources\RegisterResource;
+use App\Http\Resources\AuthTokenResource;
+use App\Http\Resources\TokenResource;
 use App\Traits\ApiResponseTrait;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -23,7 +25,7 @@ class AuthController extends Controller
         $dto = RegisterDTO::fromRequest($request);
         $this->authService->register($dto);
 
-        return $this->successResponse(new RegisterResource($dto), 'Registration successful');
+        return $this->successResponse(new AuthTokenResource($dto), 'Registration successful');
     }
 
     public function login(LoginRequest $request)
@@ -31,7 +33,7 @@ class AuthController extends Controller
         $dto = LoginDTO::fromRequest($request);
         $this->authService->login($dto);
 
-        return $this->successResponse(new LoginResource($dto), 'Login successful');
+        return $this->successResponse(new AuthTokenResource($dto), 'Login successful');
     }
 
     public function logout()
@@ -39,5 +41,12 @@ class AuthController extends Controller
         $this->authService->logout();
 
         return $this->successResponse([], 'Logout successfully');
+    }
+
+    public function refresh()
+    {
+        $dto = new RefreshDTO;
+        $this->authService->refresh($dto);
+        return $this->successResponse(new TokenResource($dto), 'Refreshed successful');
     }
 }

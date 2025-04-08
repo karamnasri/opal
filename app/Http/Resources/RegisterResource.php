@@ -15,13 +15,7 @@ class RegisterResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'token' => $this->token,
-            'user' => [
-                'id' => $this->user->id,
-                'name' => $this->user->name,
-                'email' => $this->user->email,
-                'role' => $this->user->role->name,
-            ],
+            'tokens' => new TokenResource($this->tokens),
             'verify' => $this->verify
         ];
     }

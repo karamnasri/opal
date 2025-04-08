@@ -4,7 +4,10 @@ namespace App\Services\Auth;
 
 use App\Contracts\Authenticatable;
 use App\DTOs\Auth\LoginDTO;
+use App\DTOs\Auth\RefreshDTO;
 use App\DTOs\Auth\RegisterDTO;
+use App\DTOs\Auth\TokenPairDTO;
+use App\Enums\TokenAbilityEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,20 +15,43 @@ class AuthService implements Authenticatable
 {
     public function register(RegisterDTO $dto)
     {
-        $dto->user = User::createUser($dto->toArray());
-        $dto->user->sendVerificationEmail();
-        $dto->token = $dto->user->token();
+        $user = User::createUser($dto->toArray());
+        $user->sendVerificationEmail();
+        $dto->tokens = $user->token();
     }
 
     public function login(LoginDTO $dto)
     {
-        $dto->user = User::authenticate($dto->credentials());
-        $dto->fillDTO();
-        $dto->user->ensureAccountIsActive();
+        Auth::attempt($dto->credentials());
+        $user = Auth::user();
+        $dto->verify = (bool) $user->email_verified_at;
+        $dto->tokens =  $user->token();
+        $user->ensureAccountIsActive();
     }
 
     public function logout()
     {
-        Auth::user()?->currentAccessToken()->delete();
+        $user = Auth::user();
+
+        if ($user) {
+            // Optionally: Revoke all user tokens (logout from all devices)
+            $user->tokens->each(function ($token) {
+                $token->delete();
+            });
+
+            return response()->json(['message' => 'Logged out from all devices.']);
+        }
+
+        return response()->json(['message' => 'No user found.'], 401);
+    }
+
+    public function refresh(RefreshDTO $dto)
+    {
+        $user = Auth::user();
+
+        $user->tokens()->where('name', 'refresh-token')->delete();
+        $user->tokens()->where('name', 'access-token')->delete();
+
+        $dto->tokens = $user->token();
     }
 }

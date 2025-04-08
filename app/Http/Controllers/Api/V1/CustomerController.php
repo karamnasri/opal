@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\DTOs\Customer\CustomerDTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Services\CustomerService;
 use App\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {

@@ -1,15 +1,15 @@
 <?php
 
-use App\Http\Controllers\Api\V1\CategoryController;
-use App\Http\Controllers\Api\V1\DesignController;
-use App\Http\Controllers\Api\V1\LikeController;
-use App\Http\Controllers\BannerController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\CartController;
+use App\Http\Controllers\Api\V1\LikeController;
+use App\Http\Controllers\Api\V1\BannerController;
+use App\Http\Controllers\Api\V1\DesignController;
+use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\CustomerController;
+use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +29,6 @@ Route::prefix('categories')->group(function () {
 
 Route::prefix('designs')->group(function () {
     Route::get('/', [DesignController::class, 'index'])->name('designs.index');
-    Route::get('/search', [DesignController::class, 'search'])->name('designs.search');
-    Route::get('/all', fn(Request $req) => redirect()->route('designs.index', $req->query()));
 });
 
 Route::prefix('likes')->group(function () {
@@ -41,6 +39,10 @@ Route::prefix('banners')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
 });
 
+Route::prefix('customers')->group(function () {
+    Route::post('/', [CustomerController::class, 'upsert']);
+});
+
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index']);
     Route::post('/add', [CartController::class, 'add']);
@@ -48,17 +50,10 @@ Route::prefix('cart')->group(function () {
     Route::post('/empty', [CartController::class, 'empty']);
 });
 
-Route::prefix('subscription')->group(function () {
+Route::prefix('subscriptions')->group(function () {
     Route::get('/', [SubscriptionController::class, 'index']);
-    Route::get('/{plan:slug}', [SubscriptionController::class, 'subscribe']);
-
-    Route::get('/success', fn() => dd('success'))->name('subscription.success');
-    Route::get('/cancel', fn() => dd('cancel'))->name('subscription.cancel');
 });
 
-Route::prefix('customers')->group(function () {
-    Route::post('/', [CustomerController::class, 'upsert']);
-});
 
 Route::prefix('notifications')->group(function () {
     Route::get('/', [NotificationController::class, 'index']);

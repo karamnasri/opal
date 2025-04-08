@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Design;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -31,4 +33,20 @@ class Category extends Model
         'name',
         'description',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            Cache::forget('categories');
+        });
+
+        static::deleted(function () {
+            Cache::forget('categories');
+        });
+    }
+
+    public function designs()
+    {
+        return $this->belongsToMany(Design::class);
+    }
 }

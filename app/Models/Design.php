@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Casts\PriceCast;
 use App\Enums\PrintTypeEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
@@ -47,11 +49,15 @@ class Design extends Model
         'description',
         'price',
         'discount_percentage',
-        'category_id',
         'color',
-        's3_file_url',
-        'preview_image',
+        'file_path',
+        'image_path',
         'print_type',
+    ];
+
+    protected $appends = [
+        'original_price',
+        'final_price'
     ];
 
     protected $casts = [
@@ -61,31 +67,50 @@ class Design extends Model
         'print_type' => PrintTypeEnum::class
     ];
 
-    public function category()
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class);
     }
 
-    public function likedByUsers(): BelongsToMany
+    public function likers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'likes');
+        return $this->belongsToMany(User::class);
     }
 
-    public function isLikedByUser(?int $userId): bool
+    public function scopeIsLiker(Builder $query, User $user): Builder
     {
-        if (!$userId) {
-            return false;
-        }
-
-        return $this->likedByUsers()->where('user_id', $userId)->exists();
+        return $query->whereHas('likers', fn($q) => $q->where('user_id', $user->id));
     }
 
-    public function discountPrice()
+    public function isLikedBy(User $user): bool
     {
-        $discountedPrice = is_null($this->discount_percentage)
-            ? $this->price
-            : $this->price * ((100 - $this->discount_percentage) / 100);
+        return $this->likers()->where('user_id', $user->id)->exists();
+    }
 
-        return (float) number_format($discountedPrice, 2);
+    public function originalPrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->price
+        );
+    }
+
+    public function color(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => is_string($value) ? json_decode($value, true) : $value,
+            set: fn($value) => json_encode($value),
+        );
+    }
+
+    public function finalPrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->hasDiscount() ? $this->price->applyDiscount($this->discount_percentage) : $this->price
+        );
+    }
+
+    public function hasDiscount(): bool
+    {
+        return $this->discount_percentage > 0 && $this->discount_percentage < 100;
     }
 }

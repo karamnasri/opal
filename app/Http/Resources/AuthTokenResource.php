@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CartItemResource extends JsonResource
+class AuthTokenResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,11 +14,10 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         return [
-            'id' => $this->id,
-            'price' => $this->price,
-            'design' => new DesignResource($this->whenLoaded('design')),
+            'accessToken' => $this->tokens->accessToken,
+            'refreshToken' => $this->tokens->refreshToken,
+            'isVerify' => $this->verify
         ];
     }
 }

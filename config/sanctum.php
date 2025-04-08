@@ -80,4 +80,8 @@ return [
         'verify_csrf_token' => App\Http\Middleware\VerifyCsrfToken::class,
     ],
 
+
+    'ac_expiration' => 2 * 60,
+    'rt_expiration' => 7 * 24 * 60,
+
 ];

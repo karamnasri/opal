@@ -6,6 +6,8 @@ use Exception;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use App\DTOs\Auth\ResetLinkDTO;
+use App\DTOs\Auth\TokenPairDTO;
+use App\Enums\TokenAbilityEnum;
 use App\Exceptions\AccountNotActiveException;
 use App\Exceptions\EmailAlreadyVerifiedException;
 use App\Exceptions\EmailNotVerifiedException;
@@ -122,7 +124,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Role::class);
     }
 
-    public function likedDesigns(): BelongsToMany
+    public function liked(): BelongsToMany
     {
         return $this->belongsToMany(Design::class, 'likes');
     }
@@ -174,11 +176,33 @@ class User extends Authenticatable implements MustVerifyEmail
     // Authentication Tokens
     // --------------------------------------------------------
 
-    public function token()
+    public function token(): TokenPairDTO
     {
         $this->last_logged_in_at = now();
         $this->save();
-        return $this->createToken('auth_token')->plainTextToken;
+
+        return new TokenPairDTO(
+            accessToken: $this->accessToken()->plainTextToken,
+            refreshToken: $this->refreshToken()->plainTextToken
+        );
+    }
+
+    private function accessToken()
+    {
+        return $this->createToken(
+            'access-token',
+            [TokenAbilityEnum::ACCESS_TOKEN->value],
+            Carbon::now()->addMinutes(config('sanctum.ac_expiration'))
+        );
+    }
+
+    private function refreshToken()
+    {
+        return $this->createToken(
+            'refresh-token',
+            [TokenAbilityEnum::REFRESH_TOKEN->value],
+            Carbon::now()->addMinutes(config('sanctum.rt_expiration'))
+        );
     }
 
     // --------------------------------------------------------

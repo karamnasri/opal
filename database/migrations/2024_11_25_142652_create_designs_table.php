@@ -17,12 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->bigInteger('price');
-            $table->integer('discount_percentage')->nullable();
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('price');
+            $table->integer('discount_percentage')->default(0);
             $table->json('color')->nullable();
-            $table->string('s3_file_url')->nullable();
-            $table->string('preview_image')->nullable();
+            $table->string('file_path');
+            $table->string('image_path');
             $table->enum('print_type', PrintTypeEnum::getValues());
             $table->timestamps();
         });

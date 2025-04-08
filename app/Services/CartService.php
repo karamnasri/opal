@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
+use App\DTOs\CartDTO;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Design;
-use Illuminate\Support\Facades\DB;
 
 class CartService
 {
@@ -14,31 +14,24 @@ class CartService
         return Cart::with('items.design')->firstOrCreate(['user_id' => auth()->id()]);
     }
 
-    public function addItemToCart($cartId, $designId, $quantity)
+    public function addItemToCart(CartDTO $dto)
     {
-        $design = Design::findOrFail($designId);
-        $unitPrice = $design->discountPrice();
-        $cartItem = CartItem::where('cart_id', $cartId)->where('design_id', $designId)->first();
-
-        if ($cartItem) {
-            $cartItem->quantity += $quantity;
-            $cartItem->price = number_format($cartItem->quantity * $unitPrice, 2);
-            $cartItem->save();
-        } else {
-            $cartItem = CartItem::create([
-                'cart_id' => $cartId,
-                'design_id' => $designId,
-                'quantity' => $quantity,
-                'price' => number_format($quantity * $unitPrice, 2),
-            ]);
-        }
-
-        return $cartItem;
+        $dto->design = Design::findOrFail($dto->design_id);
+        CartItem::where('cart_id', $dto->cart->id)->where('design_id', $dto->design_id)->exists() ?: $this->buildItem($dto);
     }
 
-    public function removeItemFromCart($cartId, $designId)
+    private function buildItem(CartDTO $dto)
     {
-        CartItem::where('cart_id', $cartId)->where('design_id', $designId)->delete();
+        CartItem::create([
+            'cart_id' => $dto->cart->id,
+            'design_id' => $dto->design_id,
+            'price' => $dto->design->discountPrice(),
+        ]);
+    }
+
+    public function removeItemFromCart(CartDTO $dto)
+    {
+        CartItem::where('cart_id', $dto->cart->id)->where('design_id', $dto->design_id)->delete();
     }
 
     public function emptyCart($cartId)

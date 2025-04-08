@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Enums\TokenAbilityEnum;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix(config('path.auth'))
                 ->group(base_path('routes/auth.php'));
 
-            Route::middleware(['api', 'auth:sanctum'])
+            Route::middleware(['api', 'auth:sanctum', 'access.token'])
                 ->prefix(config('path.app'))
                 ->group(base_path('routes/api.php'));
 

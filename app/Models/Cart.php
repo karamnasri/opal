@@ -18,10 +18,10 @@ class Cart extends Model
 
     public function getTotalPriceBeforeAttribute()
     {
-        return $this->items->sum(fn($item) => $item->design->price * $item->quantity);
+        return (float) number_format($this->items->sum(fn($item) => $item->design->price), 2);
     }
     public function getTotalPriceAfterAttribute()
     {
-        return $this->items->sum(fn($item) => $item->price);
+        return (float) number_format($this->items->sum(fn($item) => $item->price), 2);
     }
 }

@@ -15,7 +15,7 @@ class BannerSeeder extends Seeder
     {
         $banners = collect([
             [
-                'image_url' => 'https://picsum.photos/800/600',
+                'image_path' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 1',
                 'description' => 'Discount 50%',
                 'action' => route('designs.index'),
@@ -23,7 +23,7 @@ class BannerSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'image_url' => 'https://picsum.photos/800/600',
+                'image_path' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 2',
                 'description' => 'Discount 10%',
                 'action' => route('designs.index'),
@@ -31,7 +31,7 @@ class BannerSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'image_url' => 'https://picsum.photos/800/600',
+                'image_path' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 3',
                 'description' => 'Discount 70%',
                 'action' => route('designs.index'),
@@ -39,7 +39,7 @@ class BannerSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'image_url' => 'https://picsum.photos/800/600',
+                'image_path' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 4',
                 'description' => 'Discount 40%',
                 'action' => route('designs.index'),
@@ -47,7 +47,7 @@ class BannerSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'image_url' => 'https://picsum.photos/800/600',
+                'image_path' => 'https://picsum.photos/800/600',
                 'title' => 'Last Printing 5',
                 'description' => 'Discount 20%',
                 'action' => route('designs.index'),

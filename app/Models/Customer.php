@@ -37,11 +37,6 @@ class Customer extends Model
         'brand',
         'phone',
         'address',
-        'last_order_at',
         'user_id',
-    ];
-
-    protected $casts = [
-        'last_order_at' => 'datetime'
     ];
 }

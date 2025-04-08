@@ -13,10 +13,6 @@ class RegisterDTO
     public string $name;
     public string $email;
     public string $password;
-    public string $role_id;
-    public string $verification_code;
-    public DateTime $verification_code_sent_at;
-    public User $user;
-    public string $token;
+    public TokenPairDTO $tokens;
     public bool $verify = false;
 }

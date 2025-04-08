@@ -2,28 +2,19 @@
 
 namespace App\Casts;
 
+use App\ValueObjects\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
 class PriceCast implements CastsAttributes
 {
-    /**
-     * Cast the given value.
-     *
-     * @param  array<string, mixed>  $attributes
-     */
-    public function get(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function get(Model $model, string $key, mixed $value, array $attributes): Money
     {
-        return (float) number_format($value / 100, 2);
+        return new Money((int) $value);
     }
 
-    /**
-     * Prepare the given value for storage.
-     *
-     * @param  array<string, mixed>  $attributes
-     */
-    public function set(Model $model, string $key, mixed $value, array $attributes): mixed
+    public function set(Model $model, string $key, mixed $value, array $attributes): int
     {
-        return intval($value * 100);
+        return $value instanceof Money ? $value->raw() : (int) round($value * 100);
     }
 }

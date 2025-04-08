@@ -13,9 +13,7 @@ class LoginDTO
     use DtoRequestTrait;
     public string $email;
     public string $password;
-    public User&Authenticatable $user;
-    public ?Customer $customer = null;
-    public string $token;
+    public TokenPairDTO $tokens;
     public bool $verify = false;
 
     public function credentials(): array
@@ -24,12 +22,5 @@ class LoginDTO
             'email' => $this->email,
             'password' => $this->password,
         ];
-    }
-
-    public function fillDTO()
-    {
-        $this->verify = (bool) $this->user->email_verified_at;
-        $this->token = $this->user->token();
-        $this->customer = $this->user->customer;
     }
 }

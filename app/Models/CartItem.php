@@ -10,16 +10,11 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['cart_id', 'design_id', 'quantity', 'price'];
+    protected $fillable = ['cart_id', 'design_id', 'price'];
 
     protected $casts = [
         'price' => PriceCast::class,
     ];
-
-    public function getTotalPriceAttribute(): float
-    {
-        return $this->price * $this->quantity;
-    }
 
     public function cart()
     {

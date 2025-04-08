@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('brand')->nullable()->default(null);
             $table->string('phone')->unique();
             $table->string('address')->nullable()->default(null);
-            $table->timestamp('last_order_at')->nullable()->default(null);
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

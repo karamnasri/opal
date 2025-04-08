@@ -18,14 +18,14 @@ class DesignResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'category' => new CategoryResource($this->category),
-            'price' => $this->price,
+            'category' => CategoryResource::collection($this->categories),
+            'price' => $this->original_price->inDollars(),
             'discounted_percentage' => $this->discount_percentage,
-            'discounted_price' => $this->discountPrice(),
+            'discounted_price' => $this->final_price->inDollars(),
             'colors' => $this->color,
             'preview_image' => $this->preview_image,
             'print_type' => $this->print_type,
-            'liked' => $this->isLikedByUser(auth()->id()),
+            'liked' => auth()->check() ? $this->isLikedBy(auth()->user()) : false,
         ];
     }
 }
