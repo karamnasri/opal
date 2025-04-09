@@ -19,7 +19,7 @@ class CheckAccessTokenAbility
         $user = auth()->user();
 
         // Check if the user has the correct ability for the access token
-        if (! $user->tokenCan(TokenAbilityEnum::REFRESH_TOKEN->value)) {
+        if (! $user->tokenCan(TokenAbilityEnum::ACCESS_TOKEN->value)) {
             return response()->json(['status' => false, 'message' => 'Access token is invalid or expired.'], 403);
         }
 
