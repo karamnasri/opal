@@ -7,6 +7,7 @@ use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RefreshDTO;
 use App\DTOs\Auth\RegisterDTO;
 use App\DTOs\Auth\TokenPairDTO;
+use App\DTOs\Auth\UserDTO;
 use App\Enums\TokenAbilityEnum;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -53,5 +54,10 @@ class AuthService implements Authenticatable
         $user->tokens()->where('name', 'access-token')->delete();
 
         $dto->tokens = $user->token();
+    }
+
+    public function getUser(UserDTO $dto)
+    {
+        $dto->user = Auth::user()->with(['role', 'customer'])->first();
     }
 }

@@ -6,11 +6,13 @@ use App\Contracts\Authenticatable;
 use App\DTOs\Auth\LoginDTO;
 use App\DTOs\Auth\RefreshDTO;
 use App\DTOs\Auth\RegisterDTO;
+use App\DTOs\Auth\UserDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\AuthTokenResource;
 use App\Http\Resources\TokenResource;
+use App\Http\Resources\UserResource;
 use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 
@@ -45,8 +47,15 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        $dto = new RefreshDTO;
+        $dto = new RefreshDTO();
         $this->authService->refresh($dto);
         return $this->successResponse(new TokenResource($dto), 'Refreshed successful');
+    }
+
+    public function user()
+    {
+        $dto = new UserDTO();
+        $this->authService->getUser($dto);
+        return $this->successResponse(new UserResource($dto), 'User data retrieve successful');
     }
 }
