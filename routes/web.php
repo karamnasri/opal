@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Artisan;
-use Laravel\Cashier\Http\Controllers\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +22,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::post('stripe/webhook', [WebhookController::class, 'handleWebhook']);
 
 Route::post('database/migrate', function (Request $request) {
     $secret = env('DATABASE_SECRET');

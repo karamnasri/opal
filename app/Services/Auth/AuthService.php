@@ -58,6 +58,6 @@ class AuthService implements Authenticatable
 
     public function getUser(UserDTO $dto)
     {
-        $dto->user = Auth::user()->with(['role', 'customer'])->first();
+        $dto->user = Auth::user();
     }
 }

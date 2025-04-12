@@ -31,7 +31,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Cashier\Billable;
 
 /**
  * @property int $id
@@ -53,7 +52,7 @@ use Laravel\Cashier\Billable;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     // --------------------------------------------------------
     // Attributes
