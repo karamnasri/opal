@@ -63,6 +63,8 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'refresh.token' => \App\Http\Middleware\CheckRefreshTokenAbility::class,
+        'user.active' => \App\Http\Middleware\EnsureUserActive::class,
+        'user.verify' => \App\Http\Middleware\EnsureUserVerify::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,

@@ -27,7 +27,6 @@ class AuthService implements Authenticatable
         $user = Auth::user();
         $dto->verify = (bool) $user->email_verified_at;
         $dto->tokens =  $user->token();
-        $user->ensureAccountIsActive();
     }
 
     public function logout()
