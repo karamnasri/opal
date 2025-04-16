@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
+use App\Http\Controllers\PayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,8 +55,11 @@ Route::prefix('subscriptions')->group(function () {
     Route::get('/', [SubscriptionController::class, 'index']);
 });
 
-
 Route::prefix('notifications')->group(function () {
     Route::get('/', [NotificationController::class, 'index']);
     Route::post('/', [NotificationController::class, 'read']);
+});
+
+Route::prefix('pays')->group(function () {
+    Route::get('/', [PayController::class, 'points']);
 });

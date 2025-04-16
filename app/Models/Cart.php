@@ -40,4 +40,16 @@ class Cart extends Model
             )
         );
     }
+
+    public function checkout(): void
+    {
+        foreach ($this->items as $item) {
+            Purchase::create([
+                'user_id'   => $this->user_id,
+                'design_id' => $item->design_id,
+            ]);
+        }
+
+        $this->delete();
+    }
 }

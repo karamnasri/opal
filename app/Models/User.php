@@ -14,6 +14,7 @@ use App\Exceptions\EmailNotVerifiedException;
 use App\Exceptions\InvalidCredentialsException;
 use App\Exceptions\InvalidResetTokenException;
 use App\Exceptions\InvalidVerificationCodeException;
+use App\Exceptions\NotEnoughPointsException;
 use App\Exceptions\VerificationCodeExpiredException;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
@@ -133,6 +134,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Customer::class, 'user_id');
     }
 
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
 
     // --------------------------------------------------------
     // Scopes
@@ -169,6 +175,22 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!$this->isActive()) {
             throw new AccountNotActiveException();
         }
+    }
+
+    public function addDesignPoints(int $points): self
+    {
+        $this->increment('available_designs', $points);
+        return $this;
+    }
+
+    public function removeDesignPoints(int $points): self
+    {
+        if ($this->available_designs < $points) {
+            throw new NotEnoughPointsException($points, $this->available_designs);
+        }
+
+        $this->decrement('available_designs', $points);
+        return $this;
     }
 
     // --------------------------------------------------------
