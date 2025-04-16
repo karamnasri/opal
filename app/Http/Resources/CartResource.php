@@ -16,12 +16,9 @@ class CartResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
-            'total_price_before' => $this->total_price_before,
-            'total_price_after' => $this->total_price_after,
-            'items' => [
-                //
-            ],
+            'total_price_before' => $this->total_price_before->inDollars(),
+            'total_price_after' => $this->total_price_after->inDollars(),
+            'items' => CartItemResource::collection($this->items),
         ];
     }
 }

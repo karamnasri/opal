@@ -14,11 +14,11 @@ class CartItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-
         return [
             'id' => $this->id,
-            'price' => $this->price,
-            'design' => new DesignResource($this->whenLoaded('design')),
+            'title' => $this->design->title,
+            'image' => $this->design->image_path,
+            'price' => $this->design->original_price->inDollars(),
         ];
     }
 }

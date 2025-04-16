@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\ValueObjects\Money;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cart extends Model
 {
@@ -11,24 +13,31 @@ class Cart extends Model
 
     protected $fillable = ['user_id', 'status'];
 
+    protected $appends = [
+        'total_price_before',
+        'total_price_after',
+    ];
+
     public function items()
     {
         return $this->hasMany(CartItem::class);
     }
 
-    public function getTotalPriceBeforeAttribute(): float
+    public function totalPriceBefore(): Attribute
     {
-        return $this->items->sum(
-            fn($item) =>
-            $item->design->original_price->inDollars()
+        return Attribute::make(
+            get: fn() => new Money(
+                $this->items->sum(fn($item) => $item->design->original_price->raw())
+            )
         );
     }
 
-    public function getTotalPriceAfterAttribute(): float
+    public function totalPriceAfter(): Attribute
     {
-        return $this->items->sum(
-            fn($item) =>
-            $item->design->final_price->inDollars()
+        return Attribute::make(
+            get: fn() => new Money(
+                $this->items->sum(fn($item) => $item->design->final_price->raw())
+            )
         );
     }
 }

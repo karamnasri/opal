@@ -43,7 +43,7 @@ class CartController extends Controller
     public function remove(RemoveFromCartRequest $request)
     {
         $dto = CartDTO::fromRequest($request);
-        $dto->cart = $this->cartService->getAll();
+        $dto->cart_id = $this->cartService->getAll()->id;
         $this->cartService->removeItemFromCart($dto);
 
         return $this->successResponse([], 'Item removed from cart successfully.');
