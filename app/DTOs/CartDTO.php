@@ -10,6 +10,5 @@ class CartDTO
 {
     use DtoRequestTrait;
     public int $design_id;
-    public Cart $cart;
-    public Design $design;
+    public int $cart_id;
 }

@@ -10,11 +10,9 @@ class CartItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['cart_id', 'design_id', 'price'];
+    protected $fillable = ['cart_id', 'design_id'];
 
-    protected $casts = [
-        'price' => PriceCast::class,
-    ];
+    protected $casts = [];
 
     public function cart()
     {

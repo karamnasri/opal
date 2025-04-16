@@ -16,22 +16,20 @@ class CartService
 
     public function addItemToCart(CartDTO $dto)
     {
-        $dto->design = Design::findOrFail($dto->design_id);
-        CartItem::where('cart_id', $dto->cart->id)->where('design_id', $dto->design_id)->exists() ?: $this->buildItem($dto);
+        CartItem::where('cart_id', $dto->cart_id)->where('design_id', $dto->design_id)->exists() ?: $this->buildItem($dto);
     }
 
     private function buildItem(CartDTO $dto)
     {
         CartItem::create([
-            'cart_id' => $dto->cart->id,
+            'cart_id' => $dto->cart_id,
             'design_id' => $dto->design_id,
-            'price' => $dto->design->discountPrice(),
         ]);
     }
 
     public function removeItemFromCart(CartDTO $dto)
     {
-        CartItem::where('cart_id', $dto->cart->id)->where('design_id', $dto->design_id)->delete();
+        CartItem::where('cart_id', $dto->cart_id)->where('design_id', $dto->design_id)->delete();
     }
 
     public function emptyCart($cartId)

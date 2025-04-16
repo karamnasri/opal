@@ -94,18 +94,18 @@ class Design extends Model
         );
     }
 
+    public function finalPrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->hasDiscount() ? $this->price->applyDiscount($this->discount_percentage) : $this->price
+        );
+    }
+
     public function color(): Attribute
     {
         return Attribute::make(
             get: fn($value) => is_string($value) ? json_decode($value, true) : $value,
             set: fn($value) => json_encode($value),
-        );
-    }
-
-    public function finalPrice(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => $this->hasDiscount() ? $this->price->applyDiscount($this->discount_percentage) : $this->price
         );
     }
 

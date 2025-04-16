@@ -10,7 +10,7 @@ class VerificationCodeExpiredException extends Exception
     use HandlesExceptionResponse;
     public function __construct()
     {
-        $this->setMessage('The verification code has expired. A new one has been sent.')
+        $this->setMessage('The verification code has expired.')
             ->setCode(400);
     }
 }

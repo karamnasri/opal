@@ -236,7 +236,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         if ($this->verification_code_sent_at->addMinutes(10)->isPast()) {
-            $this->createVerificationCode();
             throw new VerificationCodeExpiredException();
         }
 

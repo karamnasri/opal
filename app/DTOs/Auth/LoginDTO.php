@@ -2,11 +2,7 @@
 
 namespace App\DTOs\Auth;
 
-use App\Models\Customer;
-use App\Models\User;
 use App\Traits\DtoRequestTrait;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Auth;
 
 class LoginDTO
 {

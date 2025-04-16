@@ -9,6 +9,7 @@ use App\DTOs\Auth\RegisterDTO;
 use App\DTOs\Auth\TokenPairDTO;
 use App\DTOs\Auth\UserDTO;
 use App\Enums\TokenAbilityEnum;
+use App\Exceptions\InvalidCredentialsException;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,10 +24,13 @@ class AuthService implements Authenticatable
 
     public function login(LoginDTO $dto)
     {
-        Auth::attempt($dto->credentials());
+        if (!Auth::attempt($dto->credentials())) {
+            throw new InvalidCredentialsException();
+        }
+
         $user = Auth::user();
         $dto->verify = (bool) $user->email_verified_at;
-        $dto->tokens =  $user->token();
+        $dto->tokens = $user->token();
     }
 
     public function logout()
@@ -34,7 +38,6 @@ class AuthService implements Authenticatable
         $user = Auth::user();
 
         if ($user) {
-            // Optionally: Revoke all user tokens (logout from all devices)
             $user->tokens->each(function ($token) {
                 $token->delete();
             });

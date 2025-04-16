@@ -31,7 +31,7 @@ class CartController extends Controller
     public function add(AddToCartRequest $request)
     {
         $dto = CartDTO::fromRequest($request);
-        $dto->cart = $this->cartService->getAll($dto);
+        $dto->cart_id = $this->cartService->getAll($dto)->id;
         $this->cartService->addItemToCart($dto);
 
         return $this->successResponse([], 'Item added to cart successfully.');

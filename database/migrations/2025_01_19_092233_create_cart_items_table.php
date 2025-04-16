@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cart_id')->constrained()->onDelete('cascade');
             $table->foreignId('design_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('final_price');
             $table->timestamps();
         });
     }

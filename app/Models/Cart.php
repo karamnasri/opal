@@ -9,19 +9,26 @@ class Cart extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'status'];
 
     public function items()
     {
         return $this->hasMany(CartItem::class);
     }
 
-    public function getTotalPriceBeforeAttribute()
+    public function getTotalPriceBeforeAttribute(): float
     {
-        return (float) number_format($this->items->sum(fn($item) => $item->design->price), 2);
+        return $this->items->sum(
+            fn($item) =>
+            $item->design->original_price->inDollars()
+        );
     }
-    public function getTotalPriceAfterAttribute()
+
+    public function getTotalPriceAfterAttribute(): float
     {
-        return (float) number_format($this->items->sum(fn($item) => $item->price), 2);
+        return $this->items->sum(
+            fn($item) =>
+            $item->design->final_price->inDollars()
+        );
     }
 }
