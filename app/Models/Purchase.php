@@ -31,4 +31,14 @@ class Purchase extends Model
         'user_id',
         'design_id',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function design()
+    {
+        return $this->belongsTo(Design::class);
+    }
 }

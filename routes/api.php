@@ -9,8 +9,9 @@ use App\Http\Controllers\Api\V1\DesignController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CustomerController;
 use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\PayController;
+use App\Http\Controllers\Api\V1\PurchaseController;
 use App\Http\Controllers\Api\V1\SubscriptionController;
-use App\Http\Controllers\PayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,4 +63,8 @@ Route::prefix('notifications')->group(function () {
 
 Route::prefix('pays')->group(function () {
     Route::get('/', [PayController::class, 'points']);
+});
+
+Route::prefix('purchases')->group(function () {
+    Route::get('/', [PurchaseController::class, 'index']);
 });
