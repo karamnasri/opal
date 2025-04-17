@@ -14,6 +14,8 @@ class DesignResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = auth()->user();
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -25,7 +27,8 @@ class DesignResource extends JsonResource
             'colors' => $this->color,
             'preview_image' => $this->image_path,
             'print_type' => $this->print_type,
-            'liked' => auth()->check() ? $this->isLikedBy(auth()->user()) : false,
+            'liked' => $user ? $this->isLikedBy($user) : false,
+            'purchased' => $user ? $this->isRecentlyPurchasedBy($user) : false,
         ];
     }
 }

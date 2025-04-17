@@ -87,6 +87,14 @@ class Design extends Model
         return $this->likers()->where('user_id', $user->id)->exists();
     }
 
+    public function isRecentlyPurchasedBy(User $user): bool
+    {
+        return $user->purchases()
+            ->where('design_id', $this->id)
+            ->where('created_at', '>=', now()->subMonth())
+            ->exists();
+    }
+
     public function originalPrice(): Attribute
     {
         return Attribute::make(
