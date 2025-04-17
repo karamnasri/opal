@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Casts\PriceCast;
 use App\Enums\PrintTypeEnum;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -64,8 +65,10 @@ class Design extends Model
         'price' => PriceCast::class,
         'discount_percentage' => 'integer',
         'color' => 'array',
-        'print_type' => PrintTypeEnum::class
+        'print_type' => PrintTypeEnum::class,
     ];
+
+    protected $hidden = ['file_path'];
 
     public function categories(): BelongsToMany
     {
@@ -114,6 +117,21 @@ class Design extends Model
         return Attribute::make(
             get: fn($value) => is_string($value) ? json_decode($value, true) : $value,
             set: fn($value) => json_encode($value),
+        );
+    }
+
+    public function filePath(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attributes): ?string {
+                $user = auth()->user();
+
+                if (!$user || Gate::denies('canAccessFilePath', $this)) {
+                    return null;
+                }
+
+                return $attributes['file_path'];
+            },
         );
     }
 
