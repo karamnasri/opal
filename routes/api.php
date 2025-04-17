@@ -67,4 +67,5 @@ Route::prefix('pays')->group(function () {
 
 Route::prefix('purchases')->group(function () {
     Route::get('/', [PurchaseController::class, 'index']);
+    Route::get('/download/{design}', [PurchaseController::class, 'download'])->name('design.download')->middleware(['signed']);
 });

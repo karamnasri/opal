@@ -19,7 +19,7 @@ class PurchaseItemResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'image_path' => $this->image_path,
-            'file_path' => $this->file_path,
+            'download_url' => $this->secureDownloadUrl(),
         ];
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\URL;
 
 /**
  *
@@ -138,5 +139,20 @@ class Design extends Model
     public function hasDiscount(): bool
     {
         return $this->discount_percentage > 0 && $this->discount_percentage < 100;
+    }
+
+    public function secureDownloadUrl(): ?string
+    {
+        $user = auth()->user();
+
+        if (!$user || !$this->isRecentlyPurchasedBy($user)) {
+            return null;
+        }
+
+        return URL::temporarySignedRoute(
+            'design.download',
+            now()->addMinutes(5),
+            ['design' => $this->id]
+        );
     }
 }
