@@ -41,9 +41,22 @@ class Cart extends Model
         );
     }
 
-    public function checkout(): void
+    public function unpurchasedItemsFor(User $user): array
     {
-        foreach ($this->items as $item) {
+        $ownedDesignIds = $user->purchases()
+            ->pluck('design_id')
+            ->flip();
+
+        return $this->items
+            ->reject(fn($item) => $ownedDesignIds->has($item->design_id))
+            ->values()
+            ->all();
+    }
+
+    public function checkout(?array $items = null): void
+    {
+        $items = $items ?? $this->items;
+        foreach ($items as $item) {
             Purchase::create([
                 'user_id'   => $this->user_id,
                 'design_id' => $item->design_id,

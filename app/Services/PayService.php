@@ -9,13 +9,9 @@ class PayService
 {
     public function payWithPoints(PointsDTO $dto): void
     {
-        try {
-            DB::transaction(function () use ($dto) {
-                $dto->user->removeDesignPoints($dto->required_points);
-                $dto->cart->checkout();
-            });
-        } catch (\Exception $e) {
-            dd($e);
-        }
+        DB::transaction(function () use ($dto) {
+            $dto->user->removeDesignPoints($dto->requiredPoints);
+            $dto->cart->checkout($dto->unpurchasedItems);
+        });
     }
 }
