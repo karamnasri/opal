@@ -11,7 +11,7 @@ class Money
 
     public function inDollars(): float
     {
-        return round($this->cents / 100, 2);
+        return $this->cents / 100;
     }
 
     public function raw(): int
@@ -29,8 +29,13 @@ class Money
         return new self($discounted);
     }
 
+    public function formatted(): string
+    {
+        return number_format($this->inDollars(), 2, '.', '');
+    }
+
     public function __toString(): string
     {
-        return number_format($this->inDollars(), 2);
+        return $this->formatted();
     }
 }

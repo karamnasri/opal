@@ -18,7 +18,7 @@ class CartItemResource extends JsonResource
             'id' => $this->design->id,
             'title' => $this->design->title,
             'image' => $this->design->image_path,
-            'price' => $this->design->original_price->inDollars(),
+            'price' => (string) $this->design->original_price,
         ];
     }
 }
