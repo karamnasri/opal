@@ -44,6 +44,7 @@ class Cart extends Model
     public function unpurchasedItemsFor(User $user): array
     {
         $ownedDesignIds = $user->purchases()
+            ->where('created_at', '>=', now()->subMonth())
             ->pluck('design_id')
             ->flip();
 
