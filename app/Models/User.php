@@ -59,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // Attributes
     // --------------------------------------------------------
 
-    protected $fillable = ['name', 'email', 'password', 'available_designs', 'design_limit_bank', 'subscription_start'];
+    protected $fillable = ['name', 'email', 'password', 'points', 'design_limit_bank', 'subscription_start'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -179,17 +179,17 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function addDesignPoints(int $points): self
     {
-        $this->increment('available_designs', $points);
+        $this->increment('points', $points);
         return $this;
     }
 
     public function removeDesignPoints(int $points): self
     {
-        if ($this->available_designs < $points) {
-            throw new NotEnoughPointsException($points, $this->available_designs);
+        if ($this->points < $points) {
+            throw new NotEnoughPointsException($points, $this->points);
         }
 
-        $this->decrement('available_designs', $points);
+        $this->decrement('points', $points);
         return $this;
     }
 
