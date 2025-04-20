@@ -11,6 +11,7 @@ use App\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseController extends Controller
 {
@@ -32,7 +33,7 @@ class PurchaseController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'You are not allowed to download this file.');
         }
 
-        $filePath = storage_path('app/' . $design->file_path);
+        $filePath = Storage::disk('designs')->path($design->file_path);
 
         if (!file_exists($filePath)) {
             abort(Response::HTTP_NOT_FOUND, 'File not found.');

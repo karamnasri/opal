@@ -10,7 +10,9 @@ use App\Services\Auth\AuthService;
 use App\Services\Auth\ResetService;
 use App\Services\Auth\SocialAuthService;
 use App\Services\Auth\VerifyService;
+use App\ValueObjects\MoneySynthesizer;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Livewire::propertySynthesizer(MoneySynthesizer::class);
     }
 }

@@ -20,6 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\SendPasswordResetLinkJob;
 use App\Jobs\SendVerificationEmailJob;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Database\Eloquent\Builder;
@@ -51,7 +52,7 @@ use Illuminate\Support\Facades\Auth;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
@@ -59,7 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail
     // Attributes
     // --------------------------------------------------------
 
-    protected $fillable = ['name', 'email', 'password', 'points', 'design_limit_bank', 'subscription_start'];
+    protected $fillable = ['name', 'email', 'password', 'points', 'design_limit_bank', 'subscription_start', 'active'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -336,5 +337,14 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->provider = $provider;
         $this->provider_id = $providerId;
         $this->save();
+    }
+
+    // --------------------------------------------------------
+    // Filament
+    // --------------------------------------------------------
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return $this->hasRole(\App\Models\Role::admin());
     }
 }

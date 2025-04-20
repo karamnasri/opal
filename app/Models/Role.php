@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * 
+ *
  *
  * @property int $id
  * @property string $name
@@ -28,4 +28,9 @@ class Role extends Model
     protected $fillable = [
         'name'
     ];
+
+    public static function admin(): ?self
+    {
+        return self::where('name', 'admin')->first();
+    }
 }

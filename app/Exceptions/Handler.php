@@ -41,13 +41,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        if (in_array(HandlesExceptionResponse::class, class_uses($e))) {
-            return $e->render();
+        if ($request->expectsJson()) {
+            if (in_array(HandlesExceptionResponse::class, class_uses($e))) {
+                return $e->render();
+            }
+
+            return $this->errorResponse(
+                $e->getMessage() ?: 'An unexpected error occurred',
+                $e->getCode() ?: 500
+            );
         }
 
-        return $this->errorResponse(
-            $e->getMessage() ?: 'An unexpected error occurred',
-            $e->getCode() ?: 500
-        );
+        return parent::render($request, $e);
     }
 }

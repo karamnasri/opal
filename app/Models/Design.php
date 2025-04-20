@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\URL;
 
 /**
@@ -59,7 +60,9 @@ class Design extends Model
 
     protected $appends = [
         'original_price',
-        'final_price'
+        'final_price',
+        'likers_count',
+        'purchases_count'
     ];
 
     protected $casts = [
@@ -79,6 +82,11 @@ class Design extends Model
     public function likers(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
+    }
+
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
     }
 
     public function scopeIsLiker(Builder $query, User $user): Builder
@@ -110,6 +118,20 @@ class Design extends Model
     {
         return Attribute::make(
             get: fn() => $this->hasDiscount() ? $this->price->applyDiscount($this->discount_percentage) : $this->price
+        );
+    }
+
+    public function likersCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->likers_count ?? $this->likers()->count()
+        );
+    }
+
+    public function purchasesCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->purchases_count ?? $this->purchases()->count()
         );
     }
 
