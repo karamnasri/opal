@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 
 /**
@@ -62,7 +63,8 @@ class Design extends Model
         'original_price',
         'final_price',
         'likers_count',
-        'purchases_count'
+        'purchases_count',
+        'image_url',
     ];
 
     protected $casts = [
@@ -132,6 +134,13 @@ class Design extends Model
     {
         return Attribute::make(
             get: fn() => $this->purchases_count ?? $this->purchases()->count()
+        );
+    }
+
+    public function ImageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => Storage::disk('public')->url($this->image_path)
         );
     }
 

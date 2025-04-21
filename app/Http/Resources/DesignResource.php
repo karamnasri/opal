@@ -26,7 +26,7 @@ class DesignResource extends JsonResource
             'discounted_percentage' => (string) $this->discount_percentage,
             'discounted_price' => (string) $this->final_price,
             'colors' => $this->color,
-            'preview_image' => Storage::disk('public')->path($this->image_path),
+            'preview_image' => $this->image_url,
             'print_type' => $this->print_type,
             'liked' => $user ? $this->isLikedBy($user) : false,
             'purchased' => $user ? $this->isRecentlyPurchasedBy($user) : false,
