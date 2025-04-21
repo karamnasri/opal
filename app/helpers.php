@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\RateLimiter;
 if (!function_exists('getUserRole')) {
     function getUserRole(): ?Role
     {
-        return Role::where('name', 'user')->first();
+        return Role::user();
     }
 }
 
 if (!function_exists('getAdminRole')) {
     function getAdminRole(): ?Role
     {
-        return Role::where('name', 'admin')->first();
+        return Role::admin();
     }
 }
 

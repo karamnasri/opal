@@ -82,6 +82,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return $user;
     }
 
+    public static function createAdmin(array $data): User
+    {
+        $user = self::create($data);
+        $user->assignRole(getAdminRole());
+        return $user;
+    }
+
     public static function findOrCreateFromSocialUser(SocialUser $socialUser, string $provider): self
     {
         return DB::transaction(function () use ($socialUser, $provider) {
@@ -345,6 +352,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(\Filament\Panel $panel): bool
     {
-        return $this->hasRole(\App\Models\Role::admin());
+        return $this->hasRole(getAdminRole());
     }
 }

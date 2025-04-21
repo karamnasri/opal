@@ -33,4 +33,9 @@ class Role extends Model
     {
         return self::where('name', 'admin')->first();
     }
+
+    public static function user(): ?self
+    {
+        return self::where('name', 'user')->first();
+    }
 }
