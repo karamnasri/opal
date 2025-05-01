@@ -50,8 +50,7 @@ class DesignResource extends Resource
                     ->prefix('$')
                     ->afterStateHydrated(function ($component, $state) {
                         $component->state($state?->inDollars());
-                    })
-                    ->dehydrateStateUsing(fn($state) => (int) ($state * 100)),
+                    }),
 
                 TextInput::make('discount_percentage')
                     ->label('Discount %')
