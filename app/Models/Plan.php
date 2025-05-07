@@ -12,15 +12,17 @@ class Plan extends Model
 
     protected $fillable = [
         'name',
-        'slug',
+        'points',
         'price',
-        'stripe_product_id',
-        'stripe_price_id',
-        'designs_limit',
-        'is_yearly',
+        'interval',
     ];
 
     protected $casts = [
         'price' => PriceCast::class,
     ];
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

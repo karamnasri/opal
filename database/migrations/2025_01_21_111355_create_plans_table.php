@@ -14,15 +14,10 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('stripe_product_id');
-            $table->string('stripe_price_id');
-            $table->bigInteger('price');
-            $table->integer('designs_limit');
-            $table->boolean('is_yearly');
+            $table->integer('points');
+            $table->decimal('price', 10, 2);
+            $table->enum('interval', ['monthly', 'yearly']);
             $table->timestamps();
-
-            $table->unique(['stripe_product_id', 'stripe_price_id']);
         });
     }
 

@@ -53,7 +53,9 @@ Route::prefix('cart')->group(function () {
 });
 
 Route::prefix('subscriptions')->group(function () {
-    Route::get('/', [SubscriptionController::class, 'index']);
+    Route::get('/plans', [SubscriptionController::class, 'plans']);
+    Route::post('create-payment-intent/{plan}', [SubscriptionController::class, 'createPaymentIntent']);
+    Route::post('confirm-subscription', [SubscriptionController::class, 'confirmSubscription']);
 });
 
 Route::prefix('notifications')->group(function () {

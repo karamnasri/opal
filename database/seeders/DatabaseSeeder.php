@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         Role::create(['name' => 'Admin']);
         Role::create(['name' => 'User']);
 
-        // $this->call(UserSeeder::class);
+        $this->call(UserSeeder::class);
         // $this->call(CategorySeeder::class);
         // $this->call(DesignSeeder::class);
         // $this->call(DesignUserSeeder::class);

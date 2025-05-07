@@ -14,15 +14,12 @@ class PlanSeeder extends Seeder
     public function run(): void
     {
         $plans = collect([
-            ['name' => 'Basic', 'slug' => 'basic-monthly', 'price' => 62.50, 'stripe_product_id' => 'prod_RjfyRUzuyvdl0i', 'stripe_price_id' => 'price_1QqCchQTvvdeRGUF44MmMckl', 'designs_limit' => 50, 'is_yearly' => false],
-            ['name' => 'Basic', 'slug' => 'basic-yearly', 'price' => 489.50, 'stripe_product_id' => 'prod_RjfyRUzuyvdl0i', 'stripe_price_id' => 'price_1QqCdgQTvvdeRGUFIDgn9Sm4', 'designs_limit' => 50, 'is_yearly' => true],
-
-            ['name' => 'Standard', 'slug' => 'standard-monthly', 'price' => 99.99, 'stripe_product_id' => 'prod_Rjg1Cp2HBAvep5', 'stripe_price_id' => 'price_1QqCfFQTvvdeRGUFn6fkkBFG', 'designs_limit' => 350, 'is_yearly' => false],
-            ['name' => 'Standard', 'slug' => 'standard-yearly', 'price' => 824.50, 'stripe_product_id' => 'prod_Rjg1Cp2HBAvep5', 'stripe_price_id' => 'price_1QqCfiQTvvdeRGUFD6VZLPWt', 'designs_limit' => 350, 'is_yearly' => true],
-
-            ['name' => 'Premium', 'slug' => 'premium-monthly', 'price' => 125.00, 'stripe_product_id' => 'prod_Rjg3MlsfHip5Q0', 'stripe_price_id' => 'price_1QqCheQTvvdeRGUF6f8zX7PU', 'designs_limit' => 750, 'is_yearly' => false],
-            ['name' => 'Premium', 'slug' => 'premium-yearly', 'price' => 999.99, 'stripe_product_id' => 'prod_Rjg3MlsfHip5Q0', 'stripe_price_id' => 'price_1QqCi3QTvvdeRGUFsaTgCaUg', 'designs_limit' => 750, 'is_yearly' => true],
-
+            ['name' => '50 Points Monthly', 'points' => 50, 'price' => 62.50, 'interval' => 'monthly'],
+            ['name' => '50 Points Yearly', 'points' => 50, 'price' => 489.50, 'interval' => 'yearly'],
+            ['name' => '350 Points Monthly', 'points' => 350, 'price' => 99.99, 'interval' => 'monthly'],
+            ['name' => '350 Points Yearly', 'points' => 350, 'price' => 824.50, 'interval' => 'yearly'],
+            ['name' => '750 Points Monthly', 'points' => 750, 'price' => 125.00, 'interval' => 'monthly'],
+            ['name' => '750 Points Yearly', 'points' => 750, 'price' => 999.99, 'interval' => 'yearly'],
         ]);
 
         $plans->map(fn($plan) => Plan::create($plan));

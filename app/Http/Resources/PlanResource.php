@@ -17,9 +17,9 @@ class PlanResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'slug' => $this->slug,
-            'price' => $this->price,
-            'designs_limit' => $this->designs_limit,
+            'points' => $this->points,
+            'price' => $this->price->inDollars(),
+            'interval' => $this->interval,
         ];
     }
 }

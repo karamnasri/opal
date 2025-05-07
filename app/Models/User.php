@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Cashier\Billable;
 
 /**
  * @property int $id
@@ -54,7 +55,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Billable;
 
     // --------------------------------------------------------
     // Attributes
@@ -152,6 +153,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return $this->hasMany(Purchase::class);
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
     // --------------------------------------------------------
     // Scopes
     // --------------------------------------------------------
@@ -159,6 +165,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     public function scopeIsActive(Builder $query): Builder
     {
         return $query->where('active', true);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status', 'active');
     }
 
     // --------------------------------------------------------
