@@ -36,7 +36,11 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware(['api', 'auth:sanctum', 'access.token', 'user.active', 'user.verify'])
                 ->prefix(config('path.app'))
-                ->group(base_path('routes/api.php'));
+                ->group(base_path('routes/secure.php'));
+
+            Route::middleware('api')
+                ->prefix(config('path.app'))
+                ->group(base_path('routes/public.php'));
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
