@@ -24,8 +24,8 @@ class SubscriptionController extends Controller
     public function createPaymentIntent(Plan $plan)
     {
         $user = auth()->user();
-        $user->createOrGetStripeCustomer();
 
+        $user->createOrGetStripeCustomer();
         $user->createSetupIntent();
 
         \Stripe\Stripe::setApiKey(config('cashier.secret'));
@@ -34,7 +34,7 @@ class SubscriptionController extends Controller
             'amount' => $plan->price->raw(),
             'currency' => 'usd',
             'customer' => $user->stripe_id,
-            'automatic_payment_methods' => ['enabled' => false],
+            'automatic_payment_methods' => ['enabled' => true],
             'metadata' => [
                 'user_id' => $user->id,
                 'plan_id' => $plan->id,

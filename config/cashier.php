@@ -2,5 +2,5 @@
 
 return [
     'key' => env('STRIPE_KEY'),
-    'secret' => env('STRIPE_SECRET'),
+    'secret' => env('CASHIER_SECRET', env('STRIPE_SECRET')),
 ];
